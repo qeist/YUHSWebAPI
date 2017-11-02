@@ -183,10 +183,12 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\ConsultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InSearchController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
     <Compile Include="Controllers\OutSearchController.cs" />
+    <Compile Include="Controllers\ReceiveController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SergeryController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -195,6 +197,7 @@
     </Compile>
     <Compile Include="Models\Common\ExecuteResult.cs" />
     <Compile Include="Models\Common\HttpResponseResult.cs" />
+    <Compile Include="Models\Consult\ConsultReqList.cs" />
     <Compile Include="Models\InSearch\InPatList.cs" />
     <Compile Include="Models\Master\DoctorList.cs" />
     <Compile Include="Models\Master\DeptList.cs" />
