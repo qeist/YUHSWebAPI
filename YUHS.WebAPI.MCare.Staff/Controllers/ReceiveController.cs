@@ -17,7 +17,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
         {
             try
             {
-                var param = new DynamicParameters(); ;
+                var param = new DynamicParameters();
                 param.Add(name: "@HpNo", value: hpNo, dbType: DbType.String, size: 20);
 
                 SqlHelper.ExecuteProcess(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_gnkakaoreceive1", param: param);
