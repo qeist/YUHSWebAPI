@@ -4,25 +4,30 @@
     {
         public string hospitalCd { get; set; }
         public string SyncOpMainSub { get; set; }
-        public string OpYmd { get; set; }
-        public string EmerYn { get; set; }
-        public string AnsGbCdNm { get; set; }
-        public string OpStrYmd { get; set; }
-        public string OpStrHm { get; set; }
-        public string OpEndYmd { get; set; }
-        public string OpEndHm { get; set; }
-        public string PatDscYmd { get; set; }
-        public string PatDscHm { get; set; }
-        public string OpRmk { get; set; }
-        public string UnitNo { get; set; }
-        public string PatNm { get; set; }
-        public string Sex { get; set; }
-        public string BirthYmd { get; set; }
-        public string MainOpDeptNm { get; set; }
-        public string OpEngNm { get; set; }
-        public string DiagEngNm { get; set; }
-        public string Ward { get; set; }
-        public string OpRnk { get; set; }
-        public string TelNo { get; set; }
+        public string operatingDt { get; set; }
+        public string operatingSeq { get; set; }
+        public string departmentNm { get; set; }
+        public string emergencyYn { get; set; }
+        public string anesthesiaMeth { get; set; }
+        public string operatingFmDt { get; set; }
+        public string operatingFmTm { get; set; }
+        public string operatingToDt { get; set; }
+        public string operatingToTm { get; set; }
+        public string patientOutDt { get; set; }
+        public string patientOutTm { get; set; }
+        public string operatingDrNm { get; set; }
+        public string operatingCntr { get; set; }
+        public string operatingRoom { get; set; }
+        public string patientId { get; set; }
+        public string patientNm { get; set; }
+        public string sex { get; set; }
+        public string birthDt { get; set; }
+        public string age { get; set; }
+        public string cellphone { get; set; }
+        public string ward { get; set; }
+        public string operatingNm { get; set; }
+        public string diagnosisNm { get; set; }
+        public string operatingTyp { get; set; }
+        public string operatingSticksOut { get; set; }
     }
 }

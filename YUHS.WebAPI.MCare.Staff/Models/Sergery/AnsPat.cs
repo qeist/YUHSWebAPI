@@ -4,29 +4,32 @@
     {
         public string hospitalCd { get; set; }
         public string SyncOpMainSub { get; set; }
-        public string OpYmd { get; set; }
-        public string EmerYn { get; set; }
-        public string AnsGbCdNm { get; set; }
-        public string OpRmk { get; set; }
-        public string UnitNo { get; set; }
-        public string PatNm { get; set; }
-        public string Sex { get; set; }
-        public string BirthYmd { get; set; }
-        public string MainOpStaffNm { get; set; }
-        public string MainOpEngNm { get; set; }
-        public string MainOpDiagEngNm { get; set; }
-        public string MainOpClnDeptCd { get; set; }
-        public string OpDeptCd { get; set; }
-        public string AnsDrMetYmd { get; set; }
-        public string AnsDrMetHm { get; set; }
-        public string AnsStrYmd { get; set; }
-        public string AnsStrHm { get; set; }
-        public string AnsEndYmd { get; set; }
-        public string AnsEndHm { get; set; }
-        public string OpRmNoNm { get; set; }
-        public string Ward { get; set; }
-        public string BlTyp { get; set; }
-        public string OpRnk { get; set; }
-
+        public string operatingSeq { get; set; }
+        public string departmentNm { get; set; }
+        public string emergencyYn { get; set; }
+        public string anesthesiaNm { get; set; }
+        public string anesthesiaMeetDt { get; set; }
+        public string anesthesiaMeetTm { get; set; }
+        public string anesthesiaFmDt { get; set; }
+        public string anesthesiaFmTm { get; set; }
+        public string anesthesiaToDt { get; set; }
+        public string anesthesiaToTm { get; set; }
+        public string operatingDrNm { get; set; }
+        public string anesthesiaDrNm { get; set; }
+        public string operatingCntr { get; set; }
+        public string operatingRoom { get; set; }
+        public string patientId { get; set; }
+        public string patientNm { get; set; }
+        public string sex { get; set; }
+        public string age { get; set; }
+        public string birthDt { get; set; }
+        public string ward { get; set; }
+        public string operatingDt { get; set; }
+        public string operatingNm { get; set; }
+        public string diagnosisNm { get; set; }
+        public string operatingTyp { get; set; }
+        public string bloodTyp { get; set; }
+        public string operatingDeptCd { get; set; }
+        public string operatingSticksOut { get; set; }
     }
 }

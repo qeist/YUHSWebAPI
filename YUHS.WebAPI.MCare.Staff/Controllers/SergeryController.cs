@@ -13,21 +13,23 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     [RequireHttps]
     public class SergeryController : ApiController
     {
-        [Route("Sergery/GetFindOpPatLst/{opFrDt}/{opToDt}/{opCntr}/{clnDept}/{opRm}/{staff}/{pln}/{prog}/{end}")]
-        public HttpResponseResult<OpPat> GetFindOpPatLst(string opFrDt, string opToDt, string opCntr, string clnDept, string opRm, string staff, string pln, string prog, string end)
+        [Route("Sergery/GetFindOpPatLst/{hospitalCd}/{viewFmDt}/{viewToDt}/{operatingCntr}/{departmentCd}/{operatingRoom}/{operatingDrNm}/{operatingTyp1}/{operatingTyp2}/{operatingTyp3}")]
+        public HttpResponseResult<OpPat> GetFindOpPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
         {
+
             try
             {
                 var param = new DynamicParameters();
-                param.Add(name: "@OpFrDt", value: opFrDt, dbType: DbType.StringFixedLength, size: 8);
-                param.Add(name: "@OpToDt", value: opToDt, dbType: DbType.StringFixedLength, size: 8);
-                param.Add(name: "@OpCntr", value: opCntr, dbType: DbType.String, size: 6);
-                param.Add(name: "@ClnDept", value: clnDept, dbType: DbType.String, size: 6);
-                param.Add(name: "@OpRm", value: opRm, dbType: DbType.String, size: 6);
-                param.Add(name: "@Staff", value: staff, dbType: DbType.String, size: 8);
-                param.Add(name: "@Pln", value: pln, dbType: DbType.StringFixedLength, size: 1);
-                param.Add(name: "@Prog", value: prog, dbType: DbType.StringFixedLength, size: 1);
-                param.Add(name: "@End", value: end, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@viewFmDt", value: viewFmDt, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@viewToDt", value: viewToDt, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@operatingCntr", value: operatingCntr, dbType: DbType.String, size: 6);
+                param.Add(name: "@departmentCd", value: departmentCd, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingRoom", value: operatingRoom, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingDrNm", value: operatingDrNm, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingTyp1", value: operatingTyp1, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@operatingTyp2", value: operatingTyp2, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@operatingTyp3", value: operatingTyp3, dbType: DbType.StringFixedLength, size: 1);
 
                 IEnumerable<OpPat> info = SqlHelper.GetList<OpPat>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectPatgetFindOpPatLst", param: param);
 
@@ -39,21 +41,22 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             }
         }
 
-        [Route("Sergery/GetFindAnsPatLst/{opFrDt}/{opToDt}/{opCntr}/{clnDept}/{rosset}/{staff}/{pln}/{prog}/{end}")]
-        public HttpResponseResult<AnsPat> GetFindAnsPatLst(string opFrDt, string opToDt, string opCntr, string clnDept, string rosset, string staff, string pln, string prog, string end)
+        [Route("Sergery/GetFindAnsPatLst/{hospitalCd}/{viewFmDt}/{viewToDt}/{operatingCntr}/{departmentCd}/{operatingRoom}/{operatingDrNm}/{operatingTyp1}/{operatingTyp2}/{operatingTyp3}")]
+        public HttpResponseResult<AnsPat> GetFindAnsPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add(name: "@OpFrDt", value: opFrDt, dbType: DbType.StringFixedLength, size: 8);
-                param.Add(name: "@OpToDt", value: opToDt, dbType: DbType.StringFixedLength, size: 8);
-                param.Add(name: "@OpCntr", value: opCntr, dbType: DbType.String, size: 6);
-                param.Add(name: "@ClnDept", value: clnDept, dbType: DbType.String, size: 6);
-                param.Add(name: "@Rosset", value: rosset, dbType: DbType.String, size: 4);
-                param.Add(name: "@Staff", value: staff, dbType: DbType.String, size: 8);
-                param.Add(name: "@Pln", value: pln, dbType: DbType.StringFixedLength, size: 1);
-                param.Add(name: "@Prog", value: prog, dbType: DbType.StringFixedLength, size: 1);
-                param.Add(name: "@End", value: end, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@viewFmDt", value: viewFmDt, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@viewToDt", value: viewToDt, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@operatingCntr", value: operatingCntr, dbType: DbType.String, size: 6);
+                param.Add(name: "@departmentCd", value: departmentCd, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingRoom", value: operatingRoom, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingDrNm", value: operatingDrNm, dbType: DbType.String, size: 6);
+                param.Add(name: "@operatingTyp1", value: operatingTyp1, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@operatingTyp2", value: operatingTyp2, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@operatingTyp3", value: operatingTyp3, dbType: DbType.StringFixedLength, size: 1);
 
                 IEnumerable<AnsPat> info = SqlHelper.GetList<AnsPat>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectgetFindAnsPatLst", param: param);
 

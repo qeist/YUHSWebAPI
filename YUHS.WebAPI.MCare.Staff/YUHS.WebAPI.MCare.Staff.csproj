@@ -187,6 +187,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InSearchController.cs" />
     <Compile Include="Controllers\MasterController.cs" />
+    <Compile Include="Controllers\NursingController.cs" />
     <Compile Include="Controllers\OutSearchController.cs" />
     <Compile Include="Controllers\ReceiveController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
@@ -201,6 +202,9 @@
     <Compile Include="Models\InSearch\InPatList.cs" />
     <Compile Include="Models\Master\DoctorList.cs" />
     <Compile Include="Models\Master\DeptList.cs" />
+    <Compile Include="Models\Nusing\MedicationHistory.cs" />
+    <Compile Include="Models\Nusing\VitalInfo.cs" />
+    <Compile Include="Models\Nusing\VitalList.cs" />
     <Compile Include="Models\OutSearch\OutPatList.cs" />
     <Compile Include="Models\Search\SrPatList.cs" />
     <Compile Include="Models\Sergery\AnsPat.cs" />
