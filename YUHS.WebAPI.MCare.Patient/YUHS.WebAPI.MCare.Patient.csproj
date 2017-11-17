@@ -188,6 +188,7 @@
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\ParkController.cs" />
     <Compile Include="Controllers\ReservationController.cs" />
+    <Compile Include="Controllers\StaffController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WaitTimeController.cs" />

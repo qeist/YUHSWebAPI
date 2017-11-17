@@ -192,6 +192,7 @@
     <Compile Include="Controllers\ReceiveController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\SergeryController.cs" />
+    <Compile Include="Controllers\TESExamRsltController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -210,6 +211,8 @@
     <Compile Include="Models\Sergery\AnsPat.cs" />
     <Compile Include="Models\Sergery\OpPat.cs" />
     <Compile Include="Models\Sergery\OpRm.cs" />
+    <Compile Include="Models\TESExamRslt\AppYmdByEGFR.cs" />
+    <Compile Include="Models\TESExamRslt\UserInfo.cs" />
     <Compile Include="Models\User\LoginInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -17,21 +17,14 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
         [Route("User/GetUserInfo/{hosCd}/{unitNo}")]
         public HttpResponseResult<PatBasInfo> GetUserInfo(string hosCd, string unitNo)
         {
-            var sw = new System.Diagnostics.Stopwatch();
             try
             {
                 var param = new DynamicParameters();
                 param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
-
-                sw.Start();
+                
                 IEnumerable<PatBasInfo> info = SqlHelper.GetList<PatBasInfo>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_GetUserInfoByUnitNo", param: param);
-                sw.Stop();
-
-                TimeSpan ts = sw.Elapsed;
-                //string elapsedTime = String.Format("{0:00}:{1:00}:{2:00}.{3:00}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds / 10);
-                Common.Utility.Utils._WriteLog($"RunTime {sw.ElapsedMilliseconds.ToString()}", $"User/{nameof(GetUserInfo)} {hosCd} {unitNo}");
-
+                
                 return new HttpResponseResult<PatBasInfo> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)

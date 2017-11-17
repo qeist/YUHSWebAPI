@@ -17,7 +17,8 @@ namespace YUHS.WebAPI.MCare.Staff.Models.Consult
         public string requestDeptCd { get; set; }
         public string requestDeptNm { get; set; }
         public string responseDtTm { get; set; }
-        public string wardNRoom { get; set; }
+        public string ward { get; set; }
+        public string room { get; set; }
         public string responseDrId { get; set; }
         public string responseDrNm { get; set; }
         public string requestDrId { get; set; }

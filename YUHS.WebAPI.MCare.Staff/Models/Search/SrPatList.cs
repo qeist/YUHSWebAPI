@@ -9,6 +9,8 @@
         public string sex { get; set; }
         public string ward { get; set; }
         public string room { get; set; }
+        public string bed { get; set; }
+        public string visitNo { get; set; }
         public string departmentCd { get; set; }
         public string departmentNm { get; set; }
         public string doctorNm { get; set; }

@@ -120,6 +120,9 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 var result2 = info.Item2;
                 var result3 = info.Item3;
 
+                //SqlHelper.QueryMultiple(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SaveWebRsv", param: param);
+
+
                 return new HttpResponseResult<ReservationResult3> { result = result3, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)

@@ -84,6 +84,30 @@ namespace YUHS.WebAPI.Common.DataAccess
         //    }
         //}
 
+        public static GridReader QueryMultiple(string targetDB, string storedProcedure, DynamicParameters param = null)
+        {
+            using (SqlConnection connection = new SqlConnection(targetDB))
+            {
+                try
+                {
+                    connection.Open();
+
+                    using (var output = connection.QueryMultiple(GetStoredProcedure(storedProcedure), param, commandType: CommandType.StoredProcedure))
+                    {
+                        return output;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
         public static Tuple<IList<T1>, IList<T2>, IList<T3>> GetMultiPleList<T1, T2, T3>(string targetDB, string storedProcedure, DynamicParameters param = null) where T1 : class where T2 : class where T3 : class 
         {
             using (SqlConnection connection = new SqlConnection(targetDB))
@@ -94,9 +118,11 @@ namespace YUHS.WebAPI.Common.DataAccess
 
                     using (var output = connection.QueryMultiple(GetStoredProcedure(storedProcedure), param, commandType: CommandType.StoredProcedure))
                     {
-                        IList<T1> t1 = NextResult<T1>(output);
-                        IList<T2> t2 = NextResult<T2>(output);
-                        IList<T3> t3 = NextResult<T3>(output);
+                        
+                            IList<T1> t1 = NextResult<T1>(output);
+                            IList<T2> t2 = NextResult<T2>(output);
+                            IList<T3> t3 = NextResult<T3>(output);
+                        
 
                         return new Tuple<IList<T1>, IList<T2>, IList<T3>>(t1, t2, t3);
                     }
@@ -142,7 +168,12 @@ namespace YUHS.WebAPI.Common.DataAccess
 
         public static IList<T> NextResult<T>(GridReader resultReader) where T : class
         {
-            var result = resultReader.Read<T>(true).ToList();
+            List<T> result = null;
+            if (!resultReader.IsConsumed)
+            {
+                result = resultReader.Read<T>(true).ToList();
+               
+            }
             return result;
         }
 
