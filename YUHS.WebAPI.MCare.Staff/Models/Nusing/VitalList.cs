@@ -2,10 +2,10 @@
 {
     public class VitalList
     {
-        public string ActDt { get; set; }
+        public string enteredTm { get; set; }
         public string Levl2 { get; set; }
         public string Levl3 { get; set; }
-        public string ItmCd { get; set; }
-        public string MsmtVal { get; set; }
+        public string itemCd { get; set; }
+        public string monitorVal { get; set; }
     }
 }

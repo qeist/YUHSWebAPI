@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
@@ -138,6 +135,25 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 param.Add(name: "@Memo", value: memo, dbType: DbType.String, size: 100);
 
                 IEnumerable<StaffInfo> info = SqlHelper.GetList<StaffInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getDoctorBySpeciality", param: param);
+
+                return new HttpResponseResult<StaffInfo> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<StaffInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+        [Route("Staff/GetDoctorByAll/{hosCd}/{memo}")]
+        public HttpResponseResult<StaffInfo> GetDoctorByAll(string hosCd, string memo)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@Memo", value: memo, dbType: DbType.String, size: 100);
+
+                IEnumerable<StaffInfo> info = SqlHelper.GetList<StaffInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getDoctorByAll", param: param);
 
                 return new HttpResponseResult<StaffInfo> { result = info, error = new ErrorInfo { flag = false } };
             }

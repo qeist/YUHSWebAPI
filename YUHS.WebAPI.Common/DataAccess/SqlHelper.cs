@@ -84,7 +84,7 @@ namespace YUHS.WebAPI.Common.DataAccess
         //    }
         //}
 
-        public static GridReader QueryMultiple(string targetDB, string storedProcedure, DynamicParameters param = null)
+        public static IList<T> GetSingleInMultipleList<T>(string targetDB, string storedProcedure, DynamicParameters param = null) where T : class
         {
             using (SqlConnection connection = new SqlConnection(targetDB))
             {
@@ -94,7 +94,13 @@ namespace YUHS.WebAPI.Common.DataAccess
 
                     using (var output = connection.QueryMultiple(GetStoredProcedure(storedProcedure), param, commandType: CommandType.StoredProcedure))
                     {
-                        return output;
+                        IList<T> t1 = null;
+                        while (!output.IsConsumed)
+                        {
+                            t1 = NextResult<T>(output);
+                        }
+
+                        return t1;
                     }
                 }
                 catch (Exception ex)
@@ -118,12 +124,9 @@ namespace YUHS.WebAPI.Common.DataAccess
 
                     using (var output = connection.QueryMultiple(GetStoredProcedure(storedProcedure), param, commandType: CommandType.StoredProcedure))
                     {
-                        
-                            IList<T1> t1 = NextResult<T1>(output);
-                            IList<T2> t2 = NextResult<T2>(output);
-                            IList<T3> t3 = NextResult<T3>(output);
-                        
-
+                        IList<T1> t1 = NextResult<T1>(output);
+                        IList<T2> t2 = NextResult<T2>(output);
+                        IList<T3> t3 = NextResult<T3>(output);
                         return new Tuple<IList<T1>, IList<T2>, IList<T3>>(t1, t2, t3);
                     }
                 }
@@ -172,7 +175,6 @@ namespace YUHS.WebAPI.Common.DataAccess
             if (!resultReader.IsConsumed)
             {
                 result = resultReader.Read<T>(true).ToList();
-               
             }
             return result;
         }

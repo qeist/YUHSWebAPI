@@ -115,14 +115,8 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 param.Add(name: "@HHMM", value: hhmm, dbType: DbType.String, size: 5);
                 param.Add(name: "@Memo", value: memo, dbType: DbType.String, size: 30);
 
-                var info = SqlHelper.GetMultiPleList<ReservationResult1, ReservationResult2, ReservationResult3>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SaveWebRsv", param: param);
-                var result1 = info.Item1;
-                var result2 = info.Item2;
-                var result3 = info.Item3;
-
-                //SqlHelper.QueryMultiple(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SaveWebRsv", param: param);
-
-
+                var result3 = SqlHelper.GetSingleInMultipleList<ReservationResult3>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SaveWebRsv", param: param);
+                
                 return new HttpResponseResult<ReservationResult3> { result = result3, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
