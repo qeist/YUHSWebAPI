@@ -13,7 +13,7 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
     [RequireHttps]
     public class OrderController : ApiController
     {
-        [Route("Staff/GetPrescription/{hosCd}/{unitNo}/{strYmd}/{endYmd}")]
+        [Route("Order/GetPrescription/{hosCd}/{unitNo}/{strYmd}/{endYmd}")]
         public HttpResponseResult<Prescription> GetPrescription(string hosCd, string unitNo, string strYmd, string endYmd)
         {
             try
