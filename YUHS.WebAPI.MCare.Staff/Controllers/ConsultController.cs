@@ -83,5 +83,31 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 return new HttpResponseResult<ConsultReqList> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
+
+        [Route("Consult/GetConsultInfo/{hosCd}/{unitNo}/{reqYmd}/{reqDeptCd}/{reqDrId}/{resDeptCd}/{resDrId}/{consultTyp}")]
+        public HttpResponseResult<ConsultInfo> GetConsultInfo(string hosCd, string unitNo, string reqYmd, string reqDeptCd, string reqDrId, string resDeptCd, string resDrId, string consultTyp)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
+                param.Add(name: "@ReqYmd", value: reqYmd, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@ReqDeptCd", value: reqDeptCd, dbType: DbType.String, size: 6);
+                param.Add(name: "@ReqDrId", value: reqDrId, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@ResDeptCd", value: resDeptCd, dbType: DbType.String, size: 6);
+                param.Add(name: "@ResDrId", value: resDrId, dbType: DbType.String, size: 8);
+                param.Add(name: "@ConsultTyp", value: consultTyp, dbType: DbType.StringFixedLength, size: 1);
+
+
+                IEnumerable<ConsultInfo> info = SqlHelper.GetList<ConsultInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getConsultInfo", param: param);
+
+                return new HttpResponseResult<ConsultInfo> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<ConsultInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
     }
 }

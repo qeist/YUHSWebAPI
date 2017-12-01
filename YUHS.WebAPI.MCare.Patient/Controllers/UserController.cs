@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
     public class UserController : ApiController
     {
         
-        [Route("User/GetUserInfo/{hosCd}/{uni+tNo}")]
+        [Route("User/GetUserInfo/{hosCd}/{unitNo}")]
         public HttpResponseResult<PatBasInfo> GetUserInfo(string hosCd, string unitNo)
         {
             try

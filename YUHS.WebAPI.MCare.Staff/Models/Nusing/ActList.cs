@@ -43,7 +43,6 @@
         public string Rmk { get; set; }
         public string ReqInfo { get; set; }
         public string HosiGb { get; set; }
-        public string KubGb { get; set; }
         public string HopYmd { get; set; }
         public string HopHm { get; set; }
         public string RetGb { get; set; }
@@ -71,9 +70,6 @@
         public string PrtRmk { get; set; }
         public string PrtOrdNo { get; set; }
         public string PrtRoomBed { get; set; }
-        public string RoomBed { get; set; }
-        public string UnitNo { get; set; }
-        public string PatNm { get; set; }
         public string PrtOrdYmd { get; set; }
         public string PrtPatNm { get; set; }
         public string PrtOrdSlipCd { get; set; }

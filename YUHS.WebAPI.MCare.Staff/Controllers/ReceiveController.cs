@@ -12,6 +12,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     [RequireHttps]
     public class ReceiveController : ApiController
     {
+        [HttpGet]
         [Route("Receive/Gnkakaoreceive1/{hpNo}")]
         public HttpResponseResult<ExecuteResult> Gnkakaoreceive1(string hpNo)
         {
@@ -30,6 +31,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             }
         }
 
+        [HttpGet]
         [Route("Receive/Gnkakaoreceive2/{hpNo}")]
         public HttpResponseResult<ExecuteResult> Gnkakaoreceive2(string hpNo)
         {

@@ -230,7 +230,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             }
             catch (Exception ex)
             {
-                Utils._WriteLog(ex.Message, "GetInsertExRsltSrhHis");
+                Utils._WriteLog(ex.Message, "ExecuteIvClnObsRecIVF");
             }
         }
 
@@ -270,16 +270,13 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@OrdSeq", value: ordSeq, dbType: DbType.Int64);
 
                 IEnumerable<AmpleOrdCd> info = SqlHelper.GetList<AmpleOrdCd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_TretMatDA_SelectAddMtlOrdExec", param: param);
-
+               
                 return new HttpResponseResult<AmpleOrdCd> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
                 return new HttpResponseResult<AmpleOrdCd> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
-
         }
-
-
     }
 }

@@ -114,5 +114,25 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             }
 
         }
+
+        [Route("InSearch/GetInPatInfo/{hosCd}/{unitNo}/{treatTyp}")]
+        public HttpResponseResult<InPatInfo> GetInPatInfo(string hosCd, string unitNo, string treatTyp)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
+                param.Add(name: "@TreatTyp", value: treatTyp, dbType: DbType.StringFixedLength, size: 1);
+
+                IEnumerable<InPatInfo> info = SqlHelper.GetList<InPatInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatInfo", param: param);
+
+                return new HttpResponseResult<InPatInfo> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<InPatInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
     }
 }

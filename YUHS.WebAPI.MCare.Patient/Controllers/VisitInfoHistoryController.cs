@@ -36,7 +36,7 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
         }
 
         [Route("VisitInfoHistory/GetBillDetail/{hosCd}/{chosNo}/{unitNo}/{ymd}/{chosGb}/{billNo}/{acptNo}/{acptYmd}")]
-        public HttpResponseResult<BillSum> GetBillDetail(string hosCd, string chosNo, string unitNo, string ymd, string chosGb, string billNo, string acptNo, string acptYmd)
+        public HttpResponseResult<BillDetail> GetBillDetail(string hosCd, string chosNo, string unitNo, string ymd, string chosGb, string billNo, string acptNo, string acptYmd)
         {
             try
             {
@@ -50,13 +50,13 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 param.Add(name: "@AcptNo", value: acptNo, dbType: DbType.String, size: 13);
                 param.Add(name: "@AcptYmd", value: acptYmd, dbType: DbType.StringFixedLength, size: 8);
 
-                IEnumerable<BillSum> info = SqlHelper.GetList<BillSum>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SelectBillDetail", param: param);
+                IEnumerable<BillDetail> info = SqlHelper.GetList<BillDetail>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SelectBillDetail", param: param);
 
-                return new HttpResponseResult<BillSum> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<BillDetail> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<BillSum> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<BillDetail> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

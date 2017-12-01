@@ -34,7 +34,6 @@ namespace YUHS.WebAPI.MCare.Staff.Models.Nusing
         public string OrdKindCd { get; set; }
         public string Dcnt { get; set; }
         public string OrdTypCd { get; set; }
-        public string OrdCd { get; set; }
         public string TQty { get; set; }
         public string CrNo { get; set; }
         public string PrescType { get; set; }
