@@ -34,7 +34,7 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
             }
         }
 
-        [Route("User/GetFindPatient/{hosCd}/{patNm}/{HpNo}")]
+        [Route("User/GetFindPatient/{hosCd}/{patNm}/{hpNo}")]
         public HttpResponseResult<PatBasInfo> GetFindPatient(string hosCd, string patNm , string hpNo)
         {
             try
@@ -156,6 +156,6 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
 
         }
 
-        
+       
     }
 }

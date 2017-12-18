@@ -21,7 +21,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 var param = new DynamicParameters();
                 param.Add(name: "@ClnDeptCd", value: clnDeptCd, dbType: DbType.String, size: 6);
                 
-                IEnumerable<OrderSchedule> info = SqlHelper.GetList<OrderSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSettingSchedule");
+                IEnumerable<OrderSchedule> info = SqlHelper.GetList<OrderSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSettingSchedule", param: param);
 
                 return new HttpResponseResult<OrderSchedule> { result = info, error = new ErrorInfo { flag = false } };
 

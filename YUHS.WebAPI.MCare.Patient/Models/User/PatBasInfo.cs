@@ -13,5 +13,6 @@
         public string zipCd { get; set; }
         public string zipCdTxt { get; set; }
         public string address { get; set; }
+        public string privacyYn { get; set; }
     }
 }
