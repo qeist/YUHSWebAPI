@@ -1,4 +1,4 @@
-﻿namespace YUHS.WebAPI.MCare.Staff.Models.CheckUp
+﻿namespace YUHS.WebAPI.MCare.Patient.Models.CheckUp
 {
     public class PatientInfoSurvey
     {
@@ -7,7 +7,6 @@
         public string ChosNo { get; set; }
         public string checkupDt { get; set; }
         public string patientAge { get; set; }
-        public string patientSex { get; set; }
-
+        public string patientSex { get; set; }                                               
     }
 }

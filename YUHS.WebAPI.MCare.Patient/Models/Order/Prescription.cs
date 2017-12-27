@@ -7,7 +7,7 @@
         public string departmentNm { get; set; }
         public string doctorId { get; set; }
         public string doctorNm { get; set; }
-        public string ioeFlag { get; set; }
+        public string ioFlag { get; set; }
         public string insureCd { get; set; }
         public string orderDt { get; set; }
         public string orderKind { get; set; }

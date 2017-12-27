@@ -17,25 +17,11 @@ namespace YUHS.WebAPI.Common.Communication
             DataSet SelectMlOrderListByChosNo_DietReqNtx(string unitNo, string ordYmd);
 
             [OperationContract]
-            DataTable SelectAdmiChkByUnitNo(string sParam);
-
-            [OperationContract]
-            DataTable SelectMlOrdMList_DietReqNtx();
-
-            [OperationContract]
             void InsertMlAddSpmen_DietReqNtx(Hashtable pTempHT, DataSet pTempDS);
 
             [OperationContract]
             void DeleteMlAddSpmen(Hashtable pTempHT, DataSet pTempDS);
-
-            [OperationContract]
-            void InsertDailyMlOrdCncl(string[] sParam);
-
-            [OperationContract]
-            DataTable SelectAdMlOrd(string[] sParam);
-
-            [OperationContract]
-            DataSet InitInquiry();
+            
         }
         
         [ServiceContract]
@@ -188,48 +174,24 @@ namespace YUHS.WebAPI.Common.Communication
                 Channel = Factory.CreateChannel();
             }
 
-            public void DeleteMlAddSpmen(Hashtable pTempHT, DataSet pTempDS)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DataSet InitInquiry()
-            {
-                return Channel.InitInquiry();
-            }
-
-            public void InsertDailyMlOrdCncl(string[] sParam)
-            {
-                throw new NotImplementedException();
-            }
-
-            public void InsertMlAddSpmen_DietReqNtx(Hashtable pTempHT, DataSet pTempDS)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DataTable SelectAdmiChkByUnitNo(string sParam)
-            {
-                throw new NotImplementedException();
-            }
-
-            public DataTable SelectAdMlOrd(string[] sParam)
-            {
-                throw new NotImplementedException();
-            }
-
             public DataSet SelectMlOrderListByChosNo_DietReqNtx(string unitNo, string ordYmd)
             {
                 return Channel.SelectMlOrderListByChosNo_DietReqNtx(unitNo, ordYmd);
             }
 
-            public DataTable SelectMlOrdMList_DietReqNtx()
+            public void InsertMlAddSpmen_DietReqNtx(Hashtable pTempHT, DataSet pTempDS)
             {
-                throw new NotImplementedException();
+                Channel.InsertMlAddSpmen_DietReqNtx(pTempHT, pTempDS);
+            }
+
+            public void DeleteMlAddSpmen(Hashtable pTempHT, DataSet pTempDS)
+            {
+                Channel.DeleteMlAddSpmen(pTempHT, pTempDS);
             }
         }
         #endregion
 
+        #region ZZZProxy
         public class ZZZProxy : ZZZFacade
         {
             private Binding Binding { get; set; }
@@ -254,6 +216,7 @@ namespace YUHS.WebAPI.Common.Communication
                 return Channel.setRcptRscMapping(ordDs);
             }
         }
+        #endregion
 
     }
 }

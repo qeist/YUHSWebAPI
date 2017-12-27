@@ -5,22 +5,24 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
+using YUHS.WebAPI.MCare.Patient.Models.CheckUp;
 using YUHS.WebAPI.MCare.Patient.Models.Common;
-using YUHS.WebAPI.MCare.Staff.Models.CheckUp;
 
-namespace YUHS.WebAPI.MCare.Staff.Controllers
+namespace YUHS.WebAPI.MCare.Patient.Controllers
 {
     [RequireHttps]
     public class CheckUpController : ApiController
     {
-        [Route("CheckUp/GetCheckupDate/{hospitalCd}/{patientId}")]
-        public HttpResponseResult<CheckupDate> GetCheckupDate(string hospitalCd, string patientId)
+        [Route("CheckUp/GetCheckupDate/{hospitalCd}/{patientId}/{inputDt}")]
+        public HttpResponseResult<CheckupDate> GetCheckupDate(string hospitalCd, string patientId, string inputDt)
         {
             try
             {
                 var param = new DynamicParameters();
                 param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
                 param.Add(name: "@patientId", value: patientId, dbType: DbType.String, size: 10);
+                param.Add(name: "@inputDt", value: inputDt, dbType: DbType.StringFixedLength, size: 8);
+
 
                 IEnumerable<CheckupDate> info = SqlHelper.GetList<CheckupDate>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getCheckupDate", param: param);
 
@@ -183,7 +185,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 SqlHelper.ExecuteProcess(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_saveCheckupSurvey", param: param);
                 IEnumerable<ExecuteResult> info = new List<ExecuteResult>();
                 return new HttpResponseResult<ExecuteResult> { result = info, error = new ErrorInfo { flag = false } };
-            
+
             }
             catch (Exception ex)
             {

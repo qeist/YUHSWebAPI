@@ -4,16 +4,19 @@ using System.Web.Http;
 using YUHS.WebAPI.Common.Security;
 using YUHS.WebAPI.MCare.Patient.Library;
 using YUHS.WebAPI.MCare.Patient.Models.Common;
-using System.Linq;
-using System.Collections;
 
 namespace YUHS.WebAPI.MCare.Patient.Controllers
 {
     [RequireHttps]
     public class AcptController : ApiController
     {
-        //[Route("Reservation/SetReservation/{hosCd=hosCd}/{unitNo=unitNo}/{patNm=patNm}/{deptCd=deptCd}/{drId=drId}/{ymd=ymd}/{hhmm=hhmm}/{memo?}")]
-        [Route("Acpt/GetPaymentList/{hosCd}/{unitNo}")]
+        /*
+         * 
+         * 결제 관련 API는 파라미터방식으로 개발요청
+         * ex : [Route("Reservation/SetReservation/{hosCd=hosCd}/{unitNo=unitNo}/{patNm=patNm}/{deptCd=deptCd}/{drId=drId}/{ymd=ymd}/{hhmm=hhmm}/{memo?}")]
+         * 
+        */
+        [Route("Acpt/GetPaymentList/{hosCd=hosCd}/{unitNo=unitNo}")]
         public HttpResponseDataTableResult<DataTable> GetPaymentList(string hosCd, string unitNo)
         {
             try

@@ -1,4 +1,4 @@
-﻿namespace YUHS.WebAPI.MCare.Staff.Models.CheckUp
+﻿namespace YUHS.WebAPI.MCare.Patient.Models.CheckUp
 {
     public class CheckupResult
     {

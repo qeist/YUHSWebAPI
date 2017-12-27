@@ -1,4 +1,4 @@
-﻿namespace YUHS.WebAPI.MCare.Staff.Models.CheckUp
+﻿namespace YUHS.WebAPI.MCare.Patient.Models.CheckUp
 {
     public class MetabolicInfo
     {
@@ -11,6 +11,5 @@
         public string ldl { get; set; }
         public string triglyceride { get; set; }
         public string weight { get; set; }
-
     }
 }

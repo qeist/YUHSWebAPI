@@ -186,6 +186,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AcptController.cs" />
     <Compile Include="Controllers\ArrivalController.cs" />
+    <Compile Include="Controllers\CheckUpController.cs" />
     <Compile Include="Controllers\LabResultController.cs" />
     <Compile Include="Controllers\VisitInfoHistoryController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
@@ -203,6 +204,14 @@
     <Compile Include="Library\AcptLib.cs" />
     <Compile Include="Models\Arrive\ArriveConfirmTargetList.cs" />
     <Compile Include="Models\Arrive\ArrivedConfirm.cs" />
+    <Compile Include="Models\CheckUp\CheckupDate.cs" />
+    <Compile Include="Models\CheckUp\CheckupList.cs" />
+    <Compile Include="Models\CheckUp\CheckupOpinion.cs" />
+    <Compile Include="Models\CheckUp\CheckupResult.cs" />
+    <Compile Include="Models\CheckUp\GroupCodeSurvey.cs" />
+    <Compile Include="Models\CheckUp\MasterCodeSurvey.cs" />
+    <Compile Include="Models\CheckUp\MetabolicInfo.cs" />
+    <Compile Include="Models\CheckUp\PatientInfoSurvey.cs" />
     <Compile Include="Models\Common\HttpResponseDataTableResult.cs" />
     <Compile Include="Models\LabResult\LabResult.cs" />
     <Compile Include="Models\VisitInfoHistory\BillDetail.cs" />

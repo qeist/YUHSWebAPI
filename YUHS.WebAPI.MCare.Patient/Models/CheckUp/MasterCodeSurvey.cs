@@ -1,4 +1,4 @@
-﻿namespace YUHS.WebAPI.MCare.Staff.Models.CheckUp
+﻿namespace YUHS.WebAPI.MCare.Patient.Models.CheckUp
 {
     public class MasterCodeSurvey
     {
@@ -20,6 +20,5 @@
         public string RgtDt { get; set; }
         public string LstUpdId { get; set; }
         public string LstUpdDt { get; set; }
-
     }
 }

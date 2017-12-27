@@ -4,7 +4,7 @@
     {
         public string hospitalCd { get; set; }
         public string patientId { get; set; }
-        public string ioeFlag { get; set; }
+        public string ioFlag { get; set; }
         public string visitDt { get; set; }
         public string visitTm { get; set; }
         public string dischargeDt { get; set; }

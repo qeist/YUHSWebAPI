@@ -10,8 +10,6 @@ namespace YUHS.WebAPI.MCare.Patient.Library
         public ZZZFacade _ZZZFacade { get; set; }
         public FEEFacade _FEEFacde { get; set; }
 
-        public NUTFacade _NUTFacade { get; set; }
-
         public DataTable ErrDt { get; set; }
 
         public AcptLib()

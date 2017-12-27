@@ -183,7 +183,6 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
-    <Compile Include="Controllers\CheckUpController.cs" />
     <Compile Include="Controllers\ConsultController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InSearchController.cs" />
@@ -201,14 +200,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\CheckUp\CheckupDate.cs" />
-    <Compile Include="Models\CheckUp\CheckupList.cs" />
-    <Compile Include="Models\CheckUp\CheckupOpinion.cs" />
-    <Compile Include="Models\CheckUp\CheckupResult.cs" />
-    <Compile Include="Models\CheckUp\GroupCodeSurvey.cs" />
-    <Compile Include="Models\CheckUp\MasterCodeSurvey.cs" />
-    <Compile Include="Models\CheckUp\MetabolicInfo.cs" />
-    <Compile Include="Models\CheckUp\PatientInfoSurvey.cs" />
     <Compile Include="Models\Common\ExecuteResult.cs" />
     <Compile Include="Models\Common\HttpResponseResult.cs" />
     <Compile Include="Models\Consult\ConsultInfo.cs" />
