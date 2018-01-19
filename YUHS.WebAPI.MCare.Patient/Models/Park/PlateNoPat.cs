@@ -2,8 +2,8 @@
 {
     public class PlateNoPat
     {
-        public string patientId { get; set; }
-        public string vehicleNo { get; set; }
+        public string patientId { get; set; } = "";
+        public string vehicleNo { get; set; } = "";
 
     }
 }

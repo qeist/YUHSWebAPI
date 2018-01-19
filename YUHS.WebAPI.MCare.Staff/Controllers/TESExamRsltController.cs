@@ -82,7 +82,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
                 param.Add(name: "@UserId", value: userId, dbType: DbType.String, size: 8);
 
-                IEnumerable<ExamListByEx> info = SqlHelper.GetList<ExamListByEx>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByEx");
+                IEnumerable<ExamListByEx> info = SqlHelper.GetList<ExamListByEx>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByEx", param: param);
 
                 return new HttpResponseResult<ExamListByEx> { result = info, error = new ErrorInfo { flag = false } };
                 
@@ -109,7 +109,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
                 param.Add(name: "@UserId", value: userId, dbType: DbType.String, size: 8);
 
-                IEnumerable<ExamListByFrmLab> info = SqlHelper.GetList<ExamListByFrmLab>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByFrmLab");
+                IEnumerable<ExamListByFrmLab> info = SqlHelper.GetList<ExamListByFrmLab>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByFrmLab", param: param);
 
                 return new HttpResponseResult<ExamListByFrmLab> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -134,7 +134,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
                 param.Add(name: "@UserId", value: userId, dbType: DbType.String, size: 8);
 
-                IEnumerable<ExamListByHC> info = SqlHelper.GetList<ExamListByHC>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByHC");
+                IEnumerable<ExamListByHC> info = SqlHelper.GetList<ExamListByHC>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByHC", param: param);
 
                 return new HttpResponseResult<ExamListByHC> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -159,7 +159,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
                 param.Add(name: "@UserId", value: userId, dbType: DbType.String, size: 8);
 
-                IEnumerable<ExamListByLab> info = SqlHelper.GetList<ExamListByLab>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByLab");
+                IEnumerable<ExamListByLab> info = SqlHelper.GetList<ExamListByLab>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamListByLab", param: param);
 
                 return new HttpResponseResult<ExamListByLab> { result = info, error = new ErrorInfo { flag = false } };
                 
@@ -179,7 +179,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 var param = new DynamicParameters();
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
              
-                IEnumerable<PACSOutCd> info = SqlHelper.GetList<PACSOutCd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRsltIntgViewDA_SelectPACSOutCDByUnitNo");
+                IEnumerable<PACSOutCd> info = SqlHelper.GetList<PACSOutCd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRsltIntgViewDA_SelectPACSOutCDByUnitNo", param: param);
 
                 return new HttpResponseResult<PACSOutCd> { result = info, error = new ErrorInfo { flag = false } };
 
@@ -202,7 +202,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<CurrClnInfo> info = SqlHelper.GetList<CurrClnInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectChosNoCurrClnInfoByOrd");
+                IEnumerable<CurrClnInfo> info = SqlHelper.GetList<CurrClnInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectChosNoCurrClnInfoByOrd", param: param);
 
                 return new HttpResponseResult<CurrClnInfo> { result = info, error = new ErrorInfo { flag = false } };
 
@@ -225,7 +225,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<SpcNoForGnlRslt> info = SqlHelper.GetList<SpcNoForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRslt");
+                IEnumerable<SpcNoForGnlRslt> info = SqlHelper.GetList<SpcNoForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRslt", param: param);
 
                 return new HttpResponseResult<SpcNoForGnlRslt> { result = info, error = new ErrorInfo { flag = false } };
 
@@ -247,7 +247,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRslt> info = SqlHelper.GetList<OrdRsltForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByCnti");
+                IEnumerable<OrdRsltForGnlRslt> info = SqlHelper.GetList<OrdRsltForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByCnti", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRslt> { result = info, error = new ErrorInfo { flag = false } };
 
@@ -269,7 +269,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRslt> info = SqlHelper.GetList<OrdRsltForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByCnti_YD");
+                IEnumerable<OrdRsltForGnlRslt> info = SqlHelper.GetList<OrdRsltForGnlRslt>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByCnti_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRslt> { result = info, error = new ErrorInfo { flag = false } };
 
@@ -291,7 +291,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl11");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl11", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -312,7 +312,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl11_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl11_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -333,7 +333,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl12");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl12", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -354,7 +354,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl12_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl12_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -375,7 +375,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl21");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl21", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -396,7 +396,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl21_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl21_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -417,7 +417,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl22");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl22", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -438,7 +438,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl22_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl22_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -460,7 +460,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl31");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl31", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -482,7 +482,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl31_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl31_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -504,7 +504,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl32");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl32", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -526,7 +526,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl32_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByGnl32_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -547,7 +547,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd11");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd11", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -568,7 +568,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd12");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd12", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -589,7 +589,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd21");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd21", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -610,7 +610,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd21_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd21_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -631,7 +631,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd22");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd22", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -652,7 +652,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd22_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd22_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -674,7 +674,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd31");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd31", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -696,7 +696,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd31_YD");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd31_YD", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -718,7 +718,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
                 param.Add(name: "@OrdSlipCd", value: ordSlipCd, dbType: DbType.String, size: 5);
 
-                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd32");
+                IEnumerable<OrdRsltForGnlRsltByGnlOrd> info = SqlHelper.GetList<OrdRsltForGnlRsltByGnlOrd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_GnlRsltDA_getSelectOrdRsltForGnlRsltByOrd32", param: param);
 
                 return new HttpResponseResult<OrdRsltForGnlRsltByGnlOrd> { result = info, error = new ErrorInfo { flag = false } };
             }
@@ -736,13 +736,85 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 var param = new DynamicParameters();
                 param.Add(name: "@RsltKey", value: Convert.ToInt64(rsltKey), dbType: DbType.Int64);
 
-                IEnumerable<ExRsltByRsltKey> info = SqlHelper.GetList<ExRsltByRsltKey>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_RsltKeyDA_getSelectExRsltByRsltKey");
+                IEnumerable<ExRsltByRsltKey> info = SqlHelper.GetList<ExRsltByRsltKey>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_RsltKeyDA_getSelectExRsltByRsltKey", param: param);
 
                 return new HttpResponseResult<ExRsltByRsltKey> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
                 return new HttpResponseResult<ExRsltByRsltKey> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+        [Route("TESExamRslt/SelectTreeExamLstByUnitNoByEx/{unitNo}/{retrGb}/{inOutGb}/{retrFrYmd}/{retrToYmd}/{slipGrGb}/{ordCd}/{userId}")]
+        public HttpResponseResult<ExamListByEx> SelectTreeExamLstByUnitNoByEx(string unitNo, string retrGb, string inOutGb, string retrFrYmd, string retrToYmd, string slipGrGb, string ordCd, string userId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
+                param.Add(name: "@RetrGb", value: retrGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@InOutGb", value: inOutGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@RetrFrYmd", value: retrFrYmd, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@RetrToYmd", value: retrToYmd, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@SlipGrGb", value: slipGrGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
+                param.Add(name: "@UserId", value: userId, dbType: DbType.StringFixedLength, size: 8);
+
+
+                IEnumerable<ExamListByEx> info = SqlHelper.GetList<ExamListByEx>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_ExamRsltIntgViewDA_getSelectTreeExamLstByUnitNoByEx", param: param);
+
+                return new HttpResponseResult<ExamListByEx> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<ExamListByEx> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+        [Route("TESExamRslt/SelectTreeExamLstByUnitNoByEx2/{unitNo}/{retrGb}/{inOutGb}/{retrFrYmd}/{retrToYmd}/{slipGrGb}/{ordCd}/{userId}")]
+        public HttpResponseResult<TreeExamLstByUnitNoByEx2> SelectTreeExamLstByUnitNoByEx2(string unitNo, string retrGb, string inOutGb, string retrFrYmd, string retrToYmd, string slipGrGb, string ordCd, string userId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
+                param.Add(name: "@RetrGb", value: retrGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@InOutGb", value: inOutGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@RetrFrYmd", value: retrFrYmd, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@RetrToYmd", value: retrToYmd, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@SlipGrGb", value: slipGrGb, dbType: DbType.StringFixedLength, size: 1);
+                param.Add(name: "@OrdCd", value: ordCd, dbType: DbType.String, size: 1000);
+                param.Add(name: "@UserId", value: userId, dbType: DbType.StringFixedLength, size: 8);
+
+
+                IEnumerable<TreeExamLstByUnitNoByEx2> info = SqlHelper.GetList<TreeExamLstByUnitNoByEx2>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_ExamRsltIntgViewDA_getSelectTreeExamLstByUnitNoByEx2", param: param);
+
+                return new HttpResponseResult<TreeExamLstByUnitNoByEx2> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<TreeExamLstByUnitNoByEx2> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+        [Route("TESExamRslt/GetExamRst/{hospitalCd}/{patientId}")]
+        public HttpResponseResult<ExamRst> GetExamRst(string hospitalCd, string patientId)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@patientId", value: patientId, dbType: DbType.StringFixedLength, size: 10);
+               
+
+                IEnumerable<ExamRst> info = SqlHelper.GetList<ExamRst>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRst", param: param);
+
+                return new HttpResponseResult<ExamRst> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<ExamRst> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

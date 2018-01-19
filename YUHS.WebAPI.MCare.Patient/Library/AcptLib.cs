@@ -7,18 +7,28 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 {
     public class AcptLib
     {
-        public ZZZFacade _ZZZFacade { get; set; }
-        public FEEFacade _FEEFacde { get; set; }
+        private string strHosCd;
+        private string strUnitNo;
+        private string strUserid;
+        private string strChosNo;
+        private string strClnYmd;
+        private string strErrLogNm = "Mobile 결제 수납 테이블 처리 오류";
+        private string strPermAmt;
+        private string strChosGb;
+        private string strLogDesc2;
 
-        public DataTable ErrDt { get; set; }
+        public ZZZFacade _ZZZFacade { get; set; }
+        public FEEFacade _FEEFacade { get; set; }
+
+        public DataTable errDt { get; set; }
 
         public AcptLib()
         {
             _ZZZFacade = new ZZZProxy();
-            _FEEFacde = new FEEProxy();
+            _FEEFacade = new FEEProxy();
         }
-
-        public string HosCd{ get; set; }
+        private bool CheckAcptPsbl = true;		// 수납불가 대상 체크를 실행한다.  - 모바일은 무조건 체크
+        public string HosCd { get; set; }
         public string UnitNo { get; set; }
         public string UserId { get; set; }
 
@@ -27,186 +37,234 @@ namespace YUHS.WebAPI.MCare.Patient.Library
         private string MOBILE_WINDID { get; } = "MO";
         private string MOBILE_DOMAINNM { get; } = "MOBILE";
 
-        public DataTable GetPaymentList(string hosCd, string unitNo)
+        public DataTable GetPaymentList(string hosCd, string unitNo, string chosGb, string proxyYn)
         {
             #region 기존 소스
 
-               //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
-               //DataSet ds = SelectRcptContByChosNo(pUnitNo, "", "", HosCd, "K", pUserid); //2016.11.09 이용주 무인수납기에서 예약비 수납못하게 @strGb가 strGb 파라미터 A ->K 로 변경
+            //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
+            //DataSet ds = SelectRcptContByChosNo(pUnitNo, "", "", HosCd, "K", pUserid); //2016.11.09 이용주 무인수납기에서 예약비 수납못하게 @strGb가 strGb 파라미터 A ->K 로 변경
 
             #region ■ DEBUG
 
-               //			StreamWriter _fs = new StreamWriter("C:\\OCSCardLog\\DEBUG.txt",true);	
-               //
-               //			if ( ds == null )
-               //			{
-               //				_fs.WriteLine(pUnitNo + " / " +HosCd+ " /  NULL 입니다." ); 
-               //				_fs.Close(); 
-               //			}
-               //			else
-               //			{
-               //				_fs.WriteLine(pUnitNo + " / " +HosCd+ " / "+ "TABLE COUNT : " + ds.Tables.Count + "\n" + "내원건 Count : " + ds.Tables["Ord"].Rows.Count ); 
-               //				_fs.Close(); 
-               //			}
+            //			StreamWriter _fs = new StreamWriter("C:\\OCSCardLog\\DEBUG.txt",true);	
+            //
+            //			if ( ds == null )
+            //			{
+            //				_fs.WriteLine(pUnitNo + " / " +HosCd+ " /  NULL 입니다." ); 
+            //				_fs.Close(); 
+            //			}
+            //			else
+            //			{
+            //				_fs.WriteLine(pUnitNo + " / " +HosCd+ " / "+ "TABLE COUNT : " + ds.Tables.Count + "\n" + "내원건 Count : " + ds.Tables["Ord"].Rows.Count ); 
+            //				_fs.Close(); 
+            //			}
             #endregion
 
-               //return ds;
+            //return ds;
 
             #endregion
 
-            #region ☆ 2017.06.26 시행예정일 자동보류처리
 
-               DataTable resultDt = null;
 
-            //20170714 추가 WindId 정보를 가지고 오기 위해서(병원코드, PC명, 오늘날짜) 
-            //DataTable dtWindId = GetWindId(HosCd, Dns.GetHostName().Trim(), DateTime.Now.ToString("yyyyMMdd"));
+            DataTable resultDt = null;
 
-            //strWindId = dtWindId.Rows[0]["WindId"].ToString().Trim();
+            #region ☆ 2017.06.26 시행예정일 자동보류처리- 20180105 메서드추출 - 메서드 추출
+
+            ////20170714 추가 WindId 정보를 가지고 오기 위해서(병원코드, PC명, 오늘날짜) 
+            ////DataTable dtWindId = GetWindId(HosCd, Dns.GetHostName().Trim(), DateTime.Now.ToString("yyyyMMdd"));
+
+            ////strWindId = dtWindId.Rows[0]["WindId"].ToString().Trim();
 
             //HIS.Facade.HP.ZZZ.ZZZFacade _zzzFacade = new HIS.Facade.HP.ZZZ.ZZZFacade();
 
+            //Hashtable hs = new Hashtable();
+
+            //hs.Add("HosCd", hosCd);
+            //hs.Add("DomainNm", MOBILE_USER);
+            //hs.Add("UnitNo", unitNo);
+            //hs.Add("ChosNo", "");
+            //hs.Add("Rmk1", "");
+            //hs.Add("Rmk2", "");
+            //hs.Add("Rmk3", "");
+            //hs.Add("WindId", MOBILE_WINDID);
+            //hs.Add("UserId", MOBILE_USER);
+            //hs.Add("HoldGb", "A");
+
+            //// 프로시져 호출 : USP_HP_FEE_IP_INSERT_HP_KIOSKAutoHold
+            //DataSet dss = _zzzFacade.InsertKIOSKAutoHold(hs);
+
+            //string PlnExecYmdUseYn = dss.Tables["Hold"].Rows[0]["PlnExecYmdUseYn"].ToString().Trim();
+
+
+            #endregion
+
+            string PlnExecYmdUseYn = FnPlnExecYmdUseYn(hosCd, unitNo, "A", "");
+
+            if (PlnExecYmdUseYn == "Y")
+            {
+                resultDt = getPaymentList_1(hosCd, unitNo, "M", chosGb);
+                //_OrdDs = ds;
+                //return ds;
+            }
+            else
+            {
+                //    //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
+                //모바일에선 K가 아니라 M으로 
+                resultDt = getPaymentList_1(hosCd, unitNo, "K", chosGb); //2016.11.09 이용주 무인수납기에서 예약비 수납못하게 @strGb가 strGb 파라미터 A ->K 로 변경
+                //_OrdDs = ds;
+                //return ds;
+            }
+
+            #region ☆ 2017.06.26 시행예정일 자동보류처리- 메서드 추출
+
+            //if (resultDt == null || resultDt.Columns.Contains("ErrorMsg") )
+            //if (resultDt == null || (resultDt.Rows.Count > 0
+            //    && resultDt.Rows[0]["ErrorMsg"]  != null 
+            //    && resultDt.Rows[0]["ErrorMsg"].ToString() != ""))
+            //{
+
+            //Hashtable hss = new Hashtable();
+
+            //hss.Add("HosCd", hosCd);
+            //hss.Add("DomainNm", MOBILE_USER);
+            //hss.Add("UnitNo", unitNo);
+
+            //hss.Add("ChosNo", "");
+            //hss.Add("Rmk1", "");
+            //hss.Add("Rmk2", "");
+            //hss.Add("Rmk3", "");
+            //hss.Add("WindId", MOBILE_WINDID);
+            //hss.Add("UserId", MOBILE_USER);
+            //hss.Add("HoldGb", "C");
+
+            //// 프로시져 호출 : USP_HP_FEE_IP_INSERT_HP_KIOSKAutoHold
+            //_zzzFacade.InsertKIOSKAutoHold(hss);
+
+            //}
+
+            #endregion
+
+            //모바일 UnitNo조회시  무조건 원복
+            FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+            return resultDt;
+        }
+        #region ☆ 2017.06.26 시행예정일 자동보류처리- 모바일 메서드 추출
+        private string FnPlnExecYmdUseYn(string hosCd, string unitNo, string HoldGb, string rmk1)
+        {
             Hashtable hs = new Hashtable();
 
             hs.Add("HosCd", hosCd);
-            hs.Add("DomainNm", MOBILE_DOMAINNM);
+            hs.Add("DomainNm", MOBILE_USER);
             hs.Add("UnitNo", unitNo);
             hs.Add("ChosNo", "");
-            hs.Add("Rmk1", "");
+            hs.Add("Rmk1", rmk1);
             hs.Add("Rmk2", "");
             hs.Add("Rmk3", "");
             hs.Add("WindId", MOBILE_WINDID);
             hs.Add("UserId", MOBILE_USER);
-            hs.Add("HoldGb", "A");
+            hs.Add("HoldGb", HoldGb);
 
             // 프로시져 호출 : USP_HP_FEE_IP_INSERT_HP_KIOSKAutoHold
             DataSet dss = _ZZZFacade.InsertKIOSKAutoHold(hs);
 
-            string PlnExecYmdUseYn = dss.Tables["Hold"].Rows[0]["PlnExecYmdUseYn"].ToString().Trim();
-
-            #endregion
-
-            //if (PlnExecYmdUseYn == "Y")
-            //{
-            //    DataSet ds = SelectRcptContByChosNo(pUnitNo, "", "", HosCd, "M", pUserid);
-            //    _OrdDs = ds;
-            //    //return ds;
-            //}
-            //else
-            //{
-            //    //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
-            //모바일에선 K가 아니라 M으로 
-            resultDt = getPaymentList_1(hosCd, unitNo); //2016.11.09 이용주 무인수납기에서 예약비 수납못하게 @strGb가 strGb 파라미터 A ->K 로 변경
-            //    _OrdDs = ds;
-            //    //return ds;
-            //}
-
-            #region ☆ 2017.06.26 시행예정일 자동보류처리
-
-            if (resultDt == null || resultDt.Columns.Contains("ErrorMsg"))
+            string PlnExecYmdUseYn = "";
+            if (HoldGb == "A")
             {
-
-                Hashtable hss = new Hashtable();
-
-                hss.Add("HosCd", hosCd);
-                hss.Add("DomainNm", MOBILE_DOMAINNM);
-                hss.Add("UnitNo", unitNo);
-
-                hss.Add("ChosNo", "");
-                hss.Add("Rmk1", "");
-                hss.Add("Rmk2", "");
-                hss.Add("Rmk3", "");
-                hss.Add("WindId", MOBILE_WINDID);
-                hss.Add("UserId", MOBILE_USER);
-                hss.Add("HoldGb", "C");
-
-                // 프로시져 호출 : USP_HP_FEE_IP_INSERT_HP_KIOSKAutoHold
-                _ZZZFacade.InsertKIOSKAutoHold(hss);
-
+                PlnExecYmdUseYn = dss.Tables["Hold"].Rows[0]["PlnExecYmdUseYn"].ToString().Trim();
             }
 
-            #endregion
-
-            return resultDt;
+            return PlnExecYmdUseYn;
         }
+        #endregion
 
-        private DataTable getPaymentList_1(string hosCd, string unitNo)
+        private DataTable getPaymentList_1(string hosCd, string unitNo, string gb, string chosGb)
         {
-            string pUserid = "9000001"; //? MOBILE로 바꾸면 아래 걸림.
-            if (pUserid.Length >= 8)
-                pUserid = pUserid.Substring(0, 8);
+            //string pUserid = "MOBILE"; //? MOBILE로 바꾸면 아래 걸림.
+            //if (pUserid.Length >= 8)
+            //    pUserid = pUserid.Substring(0, 8);
 
             DataSet ds = null;
             DataSet _result = null;
 
-            HosCd = hosCd;		// 병원코드를 넣는다. 
-            UnitNo = unitNo;	// 등록번호를 입력 
-            UserId = pUserid;	// UserId
+
+            strHosCd = hosCd;		// 병원코드를 넣는다. 
+            strUnitNo = unitNo;	// 등록번호를 입력 
+            strUserid = MOBILE_USER;	// UserId
+
 
             DataTable Ord = getChosListTable();
             string strPatNm = "";
             try
             {
-
                 //HIS.Facade.HP.FEE.FEEFacade facade = new HIS.Facade.HP.FEE.FEEFacade();
 
                 // 등록번호별로 무인수납 불가대상을 선별한다. 
 
 
                 #region ● KIOSK 에서 환자에 대한 수납 불가 여부를 조회한다.
-                
+
                 Hashtable pht = new Hashtable();
                 pht.Add("TRNSGB", "N");
                 pht.Add("SPGB", "KIOSK_GETPATINFO");
                 pht.Add("UnitNo", unitNo);
-                pht.Add("TermId", pUserid);
+                pht.Add("TermId", MOBILE_USER);
 
-
-                // 데이터 조회 : 강승숙 선생님의 SP 실행
-                DataSet AcptPsbl = _FEEFacde.HpEtcDs(pht);
-
-                ErrDt = KIOSKAcptPsbl(AcptPsbl, "KIOSKAcptPsbl", null);
-
-                if (ErrDt != null)
+                if (CheckAcptPsbl)
                 {
-                    //DataSet returnDs = new DataSet();
-                    //returnDs.Merge(errDt);
-                    //return returnDs; 
-                    DataRow rOrd = Ord.NewRow();
-                    rOrd["ErrorMsg"] = ErrDt.Rows[0]["ERROR_MSG"].ToString();
-                    Ord.Rows.Add(rOrd);
-                    Ord.AcceptChanges();
-                    return Ord;
-                }
+                    // 데이터 조회 : 강승숙 선생님의 SP 실행
+                    DataSet AcptPsbl = _FEEFacade.HpEtcDs(pht);
 
-                // 환자 정보에 대한 처리 
-                DataSet patInfoDs = _FEEFacde.SelectAcptContByChosNo(unitNo, hosCd);
+                    errDt = KIOSKAcptPsbl(AcptPsbl, "KIOSKAcptPsbl", null);
 
-                if (patInfoDs.Tables.Contains("PatInfo") && patInfoDs.Tables["PatInfo"].Rows.Count > 0 && patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"] != null)
-                {
-                    strPatNm = patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"].ToString();
-                }
-                ErrDt = KIOSKAcptPsbl(patInfoDs, "UnitNo", null);
+                    if (errDt != null)
+                    {
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs; 
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
 
-                if (ErrDt != null)
-                {
-                    //DataSet returnDs = new DataSet();
-                    //returnDs.Merge(errDt);
-                    //return returnDs;
-                    DataRow rOrd = Ord.NewRow();
-                    rOrd["ErrorMsg"] = ErrDt.Rows[0]["ERROR_MSG"].ToString();
-                    Ord.Rows.Add(rOrd);
-                    Ord.AcceptChanges();
-                    return Ord;
+                    // 환자 정보에 대한 처리 
+                    DataSet patInfoDs = _FEEFacade.SelectAcptContByChosNo(unitNo, hosCd);
+
+                    if (patInfoDs.Tables.Contains("PatInfo") && patInfoDs.Tables["PatInfo"].Rows.Count > 0 && patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"] != null)
+                    {
+                        strPatNm = patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"].ToString();
+                    }
+                    errDt = KIOSKAcptPsbl(patInfoDs, "UnitNo", null);
+
+                    if (errDt != null)
+                    {
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs;
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
                 }
-                
 
                 #endregion
 
 
                 // 내원건을 뽑아오잒~
                 //ds = facade.SelectRcptContByChosNo(pUnitNo, pFrClnYmd, pToClnYmd, pHosCd, pGb);
-                ds = _FEEFacde.SelectRcptContByChosNo(unitNo, "", "", hosCd, MOBILE_GB);
-
+                ds = _FEEFacade.SelectRcptContByChosNo(unitNo, "", "", hosCd, gb);
+                if (ds == null || ds.Tables.Count == 0 || !ds.Tables.Contains("RcptCont") || ds.Tables["RcptCont"].Rows.Count == 0)
+                {
+                    DataRow rOrd = Ord.NewRow();
+                    rOrd["ErrorMsg"] = "수납하실 내역이 없습니다";
+                    Ord.Rows.Add(rOrd);
+                    Ord.AcceptChanges();
+                    return Ord;
+                }
                 if (ds != null && ds.Tables.Count > 0 && ds.Tables.Contains("RcptCont") && ds.Tables["RcptCont"].Rows.Count > 0)
                 {
                     // RH 과이면서, 진료일자가 오늘이 아닌 과는 모두 삭제한다. 
@@ -238,7 +296,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
                 // 내원번호 별로 진료비를 계산하자~
                 _result = SetRcptFee(ref ds, unitNo, hosCd);
-                
+
                 pht.Clear();
                 pht = null;
 
@@ -246,29 +304,49 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 pht.Add("UnitNo", unitNo);
                 pht.Add("HosCd", hosCd);
 
-                if (_result == null) return null;
-
-                _result = _FEEFacde.ChkKIOSKExcept(_result);
-
-                if (_result == null) return null;
-
-
-                ErrDt = KIOSKAcptPsbl(_result, "ChosNo", pht);
-
-                // KIOSK 불가 대상을 내원번호 별로 선별하자 
-                if (ErrDt != null)
+                if (_result == null)
                 {
-                    // KIOSK 불가 대상일 경우 
-                    //DataSet returnDs = new DataSet();
-                    //returnDs.Merge(errDt);
-                    //return returnDs;
+                    //return null;
+                    //20180105 계산결과없을경우
                     DataRow rOrd = Ord.NewRow();
-                    rOrd["ErrorMsg"] = ErrDt.Rows[0]["ERROR_MSG"].ToString();
+                    rOrd["ErrorMsg"] = "계산 내역 조회 실패. 다시 진행 하세요.";
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
                     return Ord;
                 }
-                
+
+                _result = _FEEFacade.ChkKIOSKExcept(_result);
+
+                if (_result == null)
+                {
+                    //return null;
+                    //20180105 계산결과없을경우
+                    DataRow rOrd = Ord.NewRow();
+                    rOrd["ErrorMsg"] = "계산 내역 조회 실패. 다시 진행 하세요.";
+                    Ord.Rows.Add(rOrd);
+                    Ord.AcceptChanges();
+                    return Ord;
+                }
+
+                if (CheckAcptPsbl)
+                {
+                    errDt = KIOSKAcptPsbl(_result, "ChosNo", pht);
+
+                    // KIOSK 불가 대상을 내원번호 별로 선별하자 
+                    if (errDt != null)
+                    {
+                        // KIOSK 불가 대상일 경우 
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs;
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
+                }
+
                 for (int i = 0; i < _result.Tables["Ord"].Rows.Count; i++)
                 {
                     //일단은 외래?
@@ -279,18 +357,64 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                     rOrd["DeptNm"] = _result.Tables["Ord"].Rows[i]["DeptNm"];
                     rOrd["ClnDrId"] = _result.Tables["Ord"].Rows[i]["ClnDrId"];
                     rOrd["UserNm"] = _result.Tables["Ord"].Rows[i]["UserNm"];
-                    rOrd["ClnYmd"] = _result.Tables["Ord"].Rows[i]["ClnYmd"];
+                    rOrd["ClnYmd"] = Convert.ToDateTime(_result.Tables["Ord"].Rows[i]["ClnYmd"]).ToString("yyyyMMdd");
                     rOrd["ClnHms"] = _result.Tables["Ord"].Rows[i]["ClnHms"];
                     rOrd["ChosNo"] = _result.Tables["Ord"].Rows[i]["ChosNo"];
                     rOrd["AcptYmd"] = DateTime.Now.ToString("yyyyMMdd");
                     rOrd["AcptGb"] = "";
                     rOrd["CalcStrYmd"] = "";//외래빈값
                     rOrd["CalcEndYmd"] = "";//외래빈값
-                    rOrd["ChosGb"] = "O";
-                    rOrd["MainSubInsuNo"] = "M";//외래 M고정값.
+                    rOrd["ChosGb"] = chosGb;
+                    //안내번호
+                    rOrd["InfoMsg"] = "";
+                    for (int j = 0; j < ds.Tables["RcptCont"].Rows.Count; j++)
+                    {
+                        if (_result.Tables["Ord"].Rows[i]["ChosNo"].ToString() == ds.Tables["RcptCont"].Rows[i]["ChosNo"].ToString())
+                        {
+                            rOrd["InfoMsg"] = ds.Tables["RcptCont"].Rows[i]["InfoMsg"].ToString();
+                            break;
+                        }
+                    }
                     rOrd["ErrorMsg"] = "";
                     rOrd["PatNm"] = strPatNm;
                     rOrd["UnitNo"] = unitNo;
+                    rOrd["DisCalcYn"] = "";
+
+                    string iChosNo = _result.Tables["Ord"].Rows[i]["ChosNo"].ToString();
+
+                    int PharmCnt = 0;
+                    int OtherCnt = 0;
+
+                    //약처방관련
+                    if (_result.Tables.Contains("Ord" + iChosNo))
+                    {
+                        //약건수만 있으면 수납이 안되야됨
+                        //그외 건수가 있으면 수납이 되야됨
+                        //접수비(RcptAmt)가 널이면 수납이되야됨(있으면수납된것) 그런데 접수비는 otherCnt에 카운트가 안되서 카운트를 따로해준다
+                        for (int j = 0; j < ds.Tables["RcptCont"].Rows.Count; j++)
+                        {
+                            if (iChosNo == ds.Tables["RcptCont"].Rows[j]["ChosNo"].ToString()
+                                && Convert.ToString(ds.Tables["RcptCont"].Rows[j]["RcptAmt"]) == "")
+                            {
+                                OtherCnt++;
+                                break;
+                            }
+                        }
+
+                        for (int j = 0; j < _result.Tables["Ord" + iChosNo].Rows.Count; j++)
+                        {
+                            if (_result.Tables["Ord" + iChosNo].Rows[j]["AcptGb"].ToString() == "N")
+                            {
+                                if (_result.Tables["Ord" + iChosNo].Rows[j]["OrdTypCd"].ToString() == "P")
+                                    PharmCnt++;//약 처방건수
+                                else
+                                    OtherCnt++;//그 외 처방건수
+                            }
+                        }
+                    }
+
+                    rOrd["PharmCnt"] = Convert.ToString(PharmCnt);
+                    rOrd["OtherCnt"] = Convert.ToString(OtherCnt);
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
 
@@ -302,7 +426,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 //returnDs.Merge(GetErrorDt("", "ERR_GETRCPTINFO", "접수내역확인", "B"));
                 //return returnDs;
                 DataRow rOrd = Ord.NewRow();
-                rOrd["ErrorMsg"] = ErrDt.Rows[0]["ERROR_MSG"].ToString();
+                rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
                 Ord.Rows.Add(rOrd);
                 return Ord;
             }
@@ -520,7 +644,8 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             {
                 ordDs.Tables["Ord"].Columns.Add("RsvYn", typeof(string));
             }
-            
+
+            //HIS.Facade.HP.ZZZ.ZZZFacade _ZZZFacade = new HIS.Facade.HP.ZZZ.ZZZFacade();
             DataTable mappingDt = _ZZZFacade.setRcptRscMapping(ordDs);
 
             foreach (DataRow RRow in ordDs.Tables["Ord"].Rows)
@@ -548,11 +673,985 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             return ordDs;
         }
 
+        public DataTable GetPaymentOPD(string hosCd, string unitNo, string chosGb, string chosNo, string deptCd, string ClnYmd, string acptYmd, string proxyYn)
+        {
+            DataTable resultDt;
+
+            string PlnExecYmdUseYn = FnPlnExecYmdUseYn(hosCd, unitNo, "A", "HOLD");
+
+            if (PlnExecYmdUseYn == "Y")
+            {
+                resultDt = getPaymentOPD_1(hosCd, unitNo, chosGb, chosNo, deptCd, ClnYmd, acptYmd, proxyYn, "M");
+                //_OrdDs = ds;
+                //return ds;
+            }
+            else
+            {
+                //    //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
+                //모바일에선 K가 아니라 M으로 
+                resultDt = getPaymentOPD_1(hosCd, unitNo, chosGb, chosNo, deptCd, ClnYmd, acptYmd, proxyYn, "K"); //2016.11.09 이용주 무인수납기에서 예약비 수납못하게 @strGb가 strGb 파라미터 A ->K 로 변경
+                //_OrdDs = ds;
+                //return ds;
+            }
+
+
+            //모바일 UnitNo조회시  무조건 원복
+            FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+            return resultDt;
+        }
+        public DataTable getPaymentOPD_1(string hosCd, string unitNo, string chosGb, string chosNo, string deptCd, string ClnYmd, string acptYmd, string proxyYn, string gb)
+        {
+
+            //string pUserid = "MOBILE";
+            //if (pUserid.Length >= 8)
+            //    pUserid = pUserid.Substring(0, 8);
+
+            DataSet ds = null;
+            DataSet _result = null;
+
+            strHosCd = hosCd;		// 병원코드를 넣는다. 
+            strUnitNo = unitNo;	// 등록번호를 입력 
+            strUserid = MOBILE_USER;	// UserId
+
+            DataTable Ord = getPaymentOPDTable();
+
+            string strPatNm = "";
+            int PharmCnt = 0;
+            int OtherCnt = 0;
+
+
+            try
+            {
+                //HIS.Facade.HP.FEE.FEEFacade facade = new HIS.Facade.HP.FEE.FEEFacade();
+
+                // 등록번호별로 무인수납 불가대상을 선별한다. 
+
+
+                #region ● KIOSK 에서 환자에 대한 수납 불가 여부를 조회한다.
+
+                Hashtable pht = new Hashtable();
+                pht.Add("TRNSGB", "N");
+                pht.Add("SPGB", "KIOSK_GETPATINFO");
+                pht.Add("UnitNo", unitNo);
+                pht.Add("TermId", MOBILE_USER);
+
+                if (CheckAcptPsbl)
+                {
+                    // 데이터 조회 : 강승숙 선생님의 SP 실행
+                    DataSet AcptPsbl = _FEEFacade.HpEtcDs(pht);
+
+                    errDt = KIOSKAcptPsbl(AcptPsbl, "KIOSKAcptPsbl", null);
+
+                    if (errDt != null)
+                    {
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs;
+
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
+
+                    // 환자 정보에 대한 처리 
+                    DataSet patInfoDs = _FEEFacade.SelectAcptContByChosNo(unitNo, hosCd);
+                    if (patInfoDs.Tables.Contains("PatInfo") && patInfoDs.Tables["PatInfo"].Rows.Count > 0 && patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"] != null)
+                    {
+                        strPatNm = patInfoDs.Tables["PatInfo"].Rows[0]["PatNm"].ToString();
+                    }
+                    errDt = KIOSKAcptPsbl(patInfoDs, "UnitNo", null);
+
+                    if (errDt != null)
+                    {
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs;
+
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
+                }
+                #endregion
+
+                // 내원건을 뽑아오잒~
+                ds = _FEEFacade.SelectRcptContByChosNo(unitNo, "", "", hosCd, gb);//MOBILE은 K->M 
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables.Contains("RcptCont") && ds.Tables["RcptCont"].Rows.Count > 0)
+                {
+                    // RH 과이면서, 진료일자가 오늘이 아닌 과는 모두 삭제한다. 
+                    // 추후 내원사유( ChosResnCd ) 를 판단해서, 물리치료(E) 인 것만 골라내도록 한다. 
+                    //	추후 반영 SP :	USP_HP_FEE_OP_AmbAcptDA_SelectRcptContByChosNoA
+                    // 접수일자 가 오늘 이고 물리치료(E) 일경우 수납내역 표시
+                    // 접수일자 오늘이 아니고 물리치료(E) 일경우 수납내역 표시 안함
+
+                    //[11.10.13]신촌도 적용(SM-11-01425)if (IFUtil.IsYD())		/*IFUtil.GetLocationCd() == "10"*/	// 영동일 경우 
+                    //[11.10.13]{
+                    string toDayClnYmd = DateTime.Now.ToString("yyyyMMdd");		// ClnYmdDt
+
+                    // [07.02.19]
+                    // string selectedContent = "TRIM(ClnDeptCd) LIKE 'RH' "; 
+                    string selectedContent = " TRIM(ChosResnCd) LIKE 'E' ";
+                    selectedContent += "AND TRIM(ClnYmdDt) NOT LIKE '" + toDayClnYmd + "'";
+
+                    DataRow[] deleteRow = ds.Tables["RcptCont"].Select(selectedContent);
+                    if (deleteRow.Length > 0)
+                    {
+                        for (int i = 0; i < deleteRow.Length; i++)
+                        {
+                            ds.Tables["RcptCont"].Rows.Remove(deleteRow[i]);
+                        }
+                    }
+                    //[11.10.13]}
+                }
+
+                ds.Tables["RcptCont"].AcceptChanges();
+                ds.AcceptChanges();
+
+
+                DataTable _dt = ds.Tables["RcptCont"];	//접수 내역만 얻어온다. 
+                //내원번호다른것 날림
+                DataRow[] _dr = ds.Tables["RcptCont"].Select(" ChosNo <>'" + chosNo + "'");
+                if (_dr.Length > 0)
+                {
+                    for (int i = 0; i < ds.Tables["RcptCont"].Rows.Count; i++) ds.Tables["RcptCont"].Rows.Remove(_dr[i]);
+                }
+
+                // 내원번호 별로 진료비를 계산하자~
+                _result = SetRcptFee(ref ds, unitNo, hosCd);
+
+                pht.Clear();
+                pht = null;
+
+                pht = new Hashtable();
+                pht.Add("UnitNo", unitNo);
+                pht.Add("HosCd", hosCd);
+
+                if (_result == null)
+                {
+                    //return null;
+                    //20180105 계산결과없을경우
+                    DataRow rOrd = Ord.NewRow();
+                    rOrd["ErrorMsg"] = "계산 내역 조회 실패. 다시 진행 하세요.";
+                    Ord.Rows.Add(rOrd);
+                    Ord.AcceptChanges();
+                    return Ord;
+                }
+
+                _result = _FEEFacade.ChkKIOSKExcept(_result);
+
+                if (_result == null)
+                {
+                    //return null;
+                    //20180105 계산결과없을경우
+                    DataRow rOrd = Ord.NewRow();
+                    rOrd["ErrorMsg"] = "계산 내역 조회 실패. 다시 진행 하세요.";
+                    Ord.Rows.Add(rOrd);
+                    Ord.AcceptChanges();
+                    return Ord;
+                }
+
+                if (CheckAcptPsbl)
+                {
+                    errDt = KIOSKAcptPsbl(_result, "ChosNo", pht);
+
+                    // KIOSK 불가 대상을 내원번호 별로 선별하자 
+                    if (errDt != null)
+                    {
+                        // KIOSK 불가 대상일 경우 
+                        //DataSet returnDs = new DataSet();
+                        //returnDs.Merge(errDt);
+                        //return returnDs;
+
+                        DataRow rOrd = Ord.NewRow();
+                        rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                        Ord.Rows.Add(rOrd);
+                        Ord.AcceptChanges();
+                        return Ord;
+                    }
+                }
+                //약처방관련
+                if (_result.Tables.Contains("Ord" + chosNo))
+                {
+                    if (Convert.ToString(ds.Tables["RcptCont"].Rows[0]["RcptAmt"]) == "")
+                    {
+                        OtherCnt++;
+                    }
+
+                    for (int i = 0; i < _result.Tables["Ord" + chosNo].Rows.Count; i++)
+                    {
+                        if (_result.Tables["Ord" + chosNo].Rows[i]["AcptGb"].ToString() == "N"
+                            || _result.Tables["Ord" + chosNo].Rows[i]["AcptGb"].ToString() == "H")
+                        {
+                            if (_result.Tables["Ord" + chosNo].Rows[i]["OrdTypCd"].ToString() == "P")
+                                PharmCnt++;//약 처방건수
+                        }
+                        if (_result.Tables["Ord" + chosNo].Rows[i]["AcptGb"].ToString() == "N")
+                        {
+                            if (_result.Tables["Ord" + chosNo].Rows[i]["OrdTypCd"].ToString() != "P")
+                                OtherCnt++;//그 외 처방건수
+                        }
+                    }
+                }
+
+                for (int i = 0; i < _result.Tables["Ord"].Rows.Count; i++)
+                {
+                    //일단은 외래?
+                    DataRow rOrd = Ord.NewRow();
+
+                    rOrd["HosCd"] = _result.Tables["Ord"].Rows[i]["HosCd"];
+                    rOrd["UnitNo"] = unitNo;
+                    rOrd["PatNm"] = strPatNm;
+                    rOrd["ChosNo"] = _result.Tables["Ord"].Rows[i]["ChosNo"];
+                    rOrd["ClnYmd"] = "";
+                    rOrd["ClnHms"] = "";
+                    rOrd["MCarePayAll"] = "Y";
+                    rOrd["ChosGb"] = chosGb;
+                    rOrd["PayAmt"] = _result.Tables["PayAmt"].Rows[0]["lPayAmt"];
+                    rOrd["AddTaxAmt"] = _result.Tables["PayAmt"].Rows[0]["lblAddTaxAmt"];
+                    rOrd["ErrorMsg"] = "";
+                    rOrd["DisCalcYn"] = "";
+                    rOrd["PharmCnt"] = Convert.ToString(PharmCnt);
+                    rOrd["OtherCnt"] = Convert.ToString(OtherCnt);
+
+                    Ord.Rows.Add(rOrd);
+                    Ord.AcceptChanges();
+
+                }
+
+            }
+            catch (Exception Ex)
+            {
+                DataRow rOrd = Ord.NewRow();
+                rOrd["ErrorMsg"] = errDt.Rows[0]["ERROR_MSG"].ToString();
+                Ord.Rows.Add(rOrd);
+                Ord.AcceptChanges();
+                return Ord;
+            }
+
+            return Ord;
+        }
+
+        public DataTable SaveAcptCalc(
+              string hosCd
+            , string unitNo
+            , string chosGb
+            , string chosNo
+            , string clnYmd
+            , string crdIssLoc
+            , string crdNo
+            , string crdTypGb
+            , string vldThru
+            , string instMcnt
+            , string permAmt
+            , string permYmd
+            , string permHms
+            , string permNo
+            , string slpNo
+            , string mbstNo
+            , string inpurcCoNm
+            , string crdData
+            , string vanSeqNo
+            , string crdPermMeth
+            , string iCPermMeth
+            , string pOSNo
+            , string vanGb
+            , string inpurcCd
+            )
+        {
+            //    _cracker = null;
+            //    _cracker = _p_cracker; 
+
+            //에러시 로그기록을 위한 변수셋팅
+            strHosCd = hosCd;
+            strChosNo = chosNo;
+            strUnitNo = unitNo;
+            strClnYmd = clnYmd;
+            strPermAmt = permAmt;
+            strChosGb = chosGb;
+            strLogDesc2 = hosCd + "|" + unitNo + "|" + chosGb + "|" + chosNo + "|" + clnYmd + "|" + crdIssLoc + "|" + crdNo
+                + "|" + crdTypGb + "|" + vldThru + "|" + instMcnt + "|" + permAmt + "|" + permYmd + "|" + permHms
+                + "|" + permNo + "|" + slpNo + "|" + mbstNo + "|" + inpurcCoNm + "|" + crdData + "|" + vanSeqNo
+                + "|" + crdPermMeth + "|" + iCPermMeth + "|" + pOSNo + "|" + vanGb + "|" + inpurcCd;
+
+
+            DataTable AcptResult = makeAcptResultDt();
+            AcptResult.Rows[0]["HosCd"] = hosCd;
+            DataSet OrdDs;
+
+            //string crdUserId = userId;
+
+            //if (userId.Length > 8)
+            //    userId = userId.Substring(0, 8);
+            //확인하기 12/11
+            //내원번호와 유닛넘버로 다시 해당 내원건을 조회한다
+            //OrdDs = SelectRcptContByChosNo(pUnitNo,pHosCd,pUserId,pChosNo);
+
+
+            string PlnExecYmdUseYn = FnPlnExecYmdUseYn(hosCd, unitNo, "A", "HOLD");
+
+            if (PlnExecYmdUseYn == "Y")
+            {
+                OrdDs = SelectRcptContByChosNo_MOB3(unitNo, hosCd, chosNo, "M");
+                //_OrdDs = ds;
+                //return ds;
+            }
+            else
+            {
+                //    //[16.11.09]DataSet ds=SelectRcptContByChosNo( pUnitNo, "" , "", HosCd, "A",  pUserid);
+                //모바일에선 K가 아니라 M으로 
+                OrdDs = SelectRcptContByChosNo_MOB3(unitNo, hosCd, chosNo, "K");
+                //_OrdDs = ds;
+                //return ds;
+            }
+
+
+
+
+
+
+            //OrdDs = SelectRcptContByChosNo_MOB3(unitNo, hosCd, chosNo);
+            if (OrdDs.Tables.Contains("ERROR_MSG"))
+            {
+                //모바일 UnitNo조회시  무조건 원복
+                FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+                AcptResult.Rows[0]["ErrorMsg"] = "수납조회시 오류발생";
+                AcptResult.Rows[0]["ResultCd"] = "N";
+                return AcptResult;
+            }
+
+
+            if (!Check_Ord_LstUpDt(ref OrdDs))
+            {
+                //모바일 UnitNo조회시  무조건 원복
+                FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+                //return GetErrorDt("", "ERR_ACPTSAV", "수납도중처방변경", "C");
+                AcptResult.Rows[0]["ErrorMsg"] = "수납도중처방변경";
+                AcptResult.Rows[0]["ResultCd"] = "N";
+                return AcptResult;
+            }
+
+            DataTable dt = null;
+            Hashtable FeeNoHt = new Hashtable();
+
+            //DataTable beforeCrdFiltering = null;
+            //DataTable beforeCashFiltering = null;
+
+            //Hashtable CrdHt = null;		// 카드 승인 요청 후 리턴
+            //Hashtable CashHt = null;	// 현금 영수증 승인 요청 후 리턴
+
+            // 현금 영수증 승인 요청 후 리턴 받는 카드 
+
+            //DataTable CrdDt = null;		// 카드 Dt
+            //DataTable CashDt = null;	// 현금영수증 Dt 
+
+            //bool isExistCrd = false;
+            //bool isExistCash = false;
+
+            //grbCrdDt = null;	// 취소 내역을 보내기 위한 카드 Dt 
+            //grdCashDt = null;	// 취소 내역을 보내기 위한 현금 영수증 Dt
+
+            //boolCashAdmit = false;	// 현금 영수증 승인 여부 ( 승인 시 TRUE ) 
+            //boolCrdAdmit = false;   // 카드 승인 여부 ( 승인 시 TRUE ) 
+
+
+
+            try
+            {
+                AcptGbSet(ref OrdDs); //AcptGb 는 2
+                DataRow crdRow = OrdDs.Tables["HF_CrdIF"].NewRow();
+
+
+                /*
+                crdRow["HosCd"] = hosCd;
+                crdRow["AccCd"] = GetAccCd(inpurcCd);
+                crdRow["InpurcCd"] = "008";
+                crdRow["CrdIssLoc"] = crdIssLoc;
+                crdRow["MemNm"] = "DDC";
+                crdRow["CrdNo"] = crdNo;
+                crdRow["VldThru"] = vldThru;
+                crdRow["InstMcnt"] = instMcnt;
+                crdRow["PermAmt"] = Convert.ToInt32(permAmt.Trim());
+                crdRow["PermYmd"] = DateTime.Now.ToString("yyyyMMdd");
+                crdRow["PermHms"] = DateTime.Now.ToString("hhmmss");
+                crdRow["PermNo"] = permNo;//승인번호
+                crdRow["VanGb"] = vanGb;
+                crdRow["PermStusGb"] = "P"; // 신규 승인
+                crdRow["SlpNo"] = slpNo;  // 거래일련번호
+                crdRow["MbstNo"] = mbstNo;  // 가맹점범호 
+                crdRow["InpurcCoNm"] = inpurcCoNm;  // 매입사명
+                crdRow["InsMeth"] = "2";	// 카드리더기   ??????????????????
+                crdRow["CrdData"] = crdData;//CrdData;
+                crdRow["CnYn"] = "N";  // 카드 취소 여부 
+                crdRow["AcptCnYn"] = "N"; // 수납 취소 여부 
+                crdRow["RgtId"] = "MOBILE"; // 등록자 id
+                crdRow["LstUpdId"] = "MOBILE"; // 등록자 id
+                crdRow["RgtDt"] = System.DateTime.Now;
+                crdRow["LstUpdDt"] = System.DateTime.Now;
+                crdRow["CheckedCancel"] = false;	// 취소 아님 모두 승인 
+                crdRow["SubYn"] = "N";  // 계정 처리 
+                crdRow["ChosNo"] = chosNo; // 내원번호
+                crdRow["PermGb"] = "N"; // 신규 승인
+                crdRow["DeptCd"] = ""; // 부서
+                crdRow["ChosGb"] = "O";
+                crdRow["VanSeqNo"] = vanSeqNo; //가라
+                crdRow["CrdPermMeth"] = "MO";
+                crdRow["ICPermMeth"] = "MO";
+                crdRow["POSNo"] = "";//빈값고정
+                crdRow["CrdTypGb"] = CrdTypGb; //카드타입
+                */
+                //가라
+                crdRow["HosCd"] = hosCd;
+                crdRow["AccCd"] = GetAccCd(inpurcCd);
+                crdRow["InpurcCd"] = inpurcCd;
+                crdRow["CrdIssLoc"] = crdIssLoc;
+                crdRow["MemNm"] = "DDC";
+                crdRow["CrdNo"] = crdNo;
+                crdRow["VldThru"] = vldThru;
+                crdRow["InstMcnt"] = instMcnt;
+                crdRow["PermAmt"] = Convert.ToInt32(permAmt.Trim());
+                crdRow["PermYmd"] = DateTime.Now.ToString("yyyyMMdd");
+                crdRow["PermHms"] = DateTime.Now.ToString("hhmmss");
+                crdRow["PermNo"] = permNo;
+                //crdRow["CnBfCrdIFNo"] = //승인번호
+                crdRow["VanGb"] = vanGb;
+                crdRow["PermStusGb"] = "P"; // 신규 승인
+                crdRow["SlpNo"] = slpNo; // 거래일련번호
+                crdRow["MbstNo"] = mbstNo;  // 가맹점번호
+                crdRow["InpurcCoNm"] = inpurcCoNm;  // 매입사명
+
+                /* TODO : YUMC_Change_Start(2009.10.30, By 장근주) GM-09-00325 */
+                //무인수납기에서 후수납(오픈카드대상일경우)카드입력값을 키보드로 인식
+                //crdRow["InsMeth"] = "2";	// 카드리더기 
+                //if (CrdData.Length <= 25)
+                //{
+                //    crdRow["InsMeth"] = "1";	// 키보드(오픈카드,후수납) 
+                //}
+                //else
+                //{
+                crdRow["InsMeth"] = "2";	// 카드리더기   
+                //}
+                /* TODO : YUMC_Change_End(2009.10.30, By 장근주) GM-09-00325 */
+                crdRow["CrdData"] = crdData;//CrdData;
+                crdRow["CnYn"] = "N";  // 카드 취소 여부 
+                //crdRow["CnYmd"] =  // 카드 취소 여부 
+                //crdRow["CnHms"] =  // 카드 취소 여부 
+                crdRow["AcptCnYn"] = "N"; // 수납 취소 여부 
+                //crdRow["UcoltOccSeq"] = 
+                crdRow["RgtId"] = MOBILE_USER; // 등록자 id
+                crdRow["LstUpdId"] = MOBILE_USER; // 등록자 id
+                crdRow["RgtDt"] = System.DateTime.Now;
+                crdRow["LstUpdDt"] = System.DateTime.Now;
+                crdRow["CheckedCancel"] = false;	// 취소 아님 모두 승인 
+                //crdRow["DataFromCardReader"] =
+                crdRow["SubYn"] = "N";  // 계정 처리 
+                crdRow["ChosNo"] = chosNo; // 내원번호
+                crdRow["PermGb"] = "N"; // 신규 승인
+                crdRow["DeptCd"] = ""; // 부서
+                crdRow["ChosGb"] = "O";
+                //crdRow["SubCheck"] = 
+                crdRow["VanSeqNo"] = vanSeqNo; //가라
+                crdRow["CrdPermMeth"] = crdPermMeth;
+                crdRow["ICPermMeth"] = iCPermMeth;
+                crdRow["POSNo"] = "";//빈값고정
+                crdRow["CrdTypGb"] = crdTypGb;//카드타입
+
+                //OrdDs.Tables["HF_CrdIF"].Rows.Add(crdRow);
+
+                // Ord에 셋팅한다. 
+                //				DataRow OrdDr = AcptOrdDs.Tables["Ord"].Rows[0]; 
+                //
+                //				int iPayAmt = int.Parse(OrdDr["PayAmt"].ToString());
+                //
+                //				if ( iPayAmt == PermAmt)
+                //				{
+                OrdDs.Tables["HF_CrdIF"].Rows.Add(crdRow);
+                OrdDs.AcceptChanges();
+
+                //HIS.Facade.HP.FEE.FEEFacade facade = new HIS.Facade.HP.FEE.FEEFacade();
+                //Payment payment = new Payment();
+
+                if (OrdDs.Tables.Contains("HF_CrdIF") && OrdDs.Tables["HF_CrdIF"].Rows.Count > 0)
+                {
+                    //카드 수납 시 기존 금액에 대해, 신규 요청액을 합산한다. 
+                    SetCardDtAndOrdByAcpt(ref OrdDs);
+
+                }
+
+                // [2006.05.24] 수납 시 필터링 
+                CheckAmbAcptBefore(ref OrdDs);
+
+                #region ◐ 금액 검증
+
+                bool ambverific = AcptVerific(OrdDs, unitNo, MOBILE_USER);
+
+                if (!ambverific)
+                {
+                    //return GetErrorDt("", "ERR_AMTVARIABLE", "금액검증오류", "B");
+                    AcptResult.Rows[0]["ErrorMsg"] = "금액검증오류";
+                    AcptResult.Rows[0]["ResultCd"] = "N";
+                    return AcptResult;
+                }
+
+                #endregion
+
+                #region 주석 처방을 한번 더 조회를 해서 지금 수납하려는 금액과의 차이를 확인한다.
+
+                /*string strChosNo = OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString().Trim(); 
+				int iPayAmt = Convert.ToInt32( OrdDs.Tables["Ord"].Rows[0]["PayAmt"].ToString().Trim()  ); 
+
+				if ( CheckReCalCompare )
+				{
+					#region [2006.11.13 박성용] ○ 수납 전 체크 사항에서 제외 ( 진료비를 다시 계산하지 않는다 )
+
+//					if (! RcptReRetr( iPayAmt, pUnitNo, pHosCd, strChosNo, strUserid ) )
+//					{
+//						// 오류 처리를 한다
+//						return  GetErrorDt( "", "ERR_GETORDRESELECT","처방재조회시오류", "B"); 
+//					}
+					#endregion 
+				}
+                */
+                #endregion
+
+                #region ◐ 카드 승인 요청
+
+
+
+                // 카드 승인 요청 
+                if (OrdDs.Tables.Contains("HF_CrdIF") && OrdDs.Tables["HF_CrdIF"].Rows.Count > 0)
+                {
+                    //beforeCrdFiltering = OrdDs.Tables["HF_CrdIF"].Copy();		//Exception 발생 시 원상 복구를 위해 
+                    //isExistCrd = true;
+
+                    // 내원번호는 클래스 안에서 
+                    //_oCrdCach.prtAcptProc = "AmbAcpt";	// 외래수납
+                    //_oCrdCach.prtApprovalCancelGb = "Approval"; // 승인
+                    //_oCrdCach.prtChosNo = OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString(); 
+                    //_oCrdCach.prtUnitNo  = pUnitNo;
+                    //_oCrdCach.prtCrdCashGb = "Card"; 	
+                    //_oCrdCach.prtBilNo = ""; 
+                    //_oCrdCach.strHosCd = pHosCd; 
+
+                    //CrdHt = _oCrdCach.AmbCardApproval( OrdDs.Tables["HF_CrdIF"], 
+                    //    pHosCd, pUnitNo, pDeptCd, pWindId, crdUserId, "AmbAcpt"
+                    //    , ref _cracker 
+                    //    ); 
+
+                    //CrdDt = CrdHt["HF_CrdIF"] as DataTable;
+
+
+
+                    // 카드 테이블을 설정한다. 
+                    CrdAcptDt(ref OrdDs);
+                    int iCount = 0;
+                    // 카드 승인 시 채번의 조건 
+                    // #1. 기존 승인 된 건에 대한 취소 건 [ 정산 Status ='Z' ]을 구하기 위해 : [PreData] = 'C' 
+                    // #2. 새로운 신규 승인 요청 : [PreData] = 'N' 
+                    for (int i = 0; i < OrdDs.Tables["HF_CrdIF"].Rows.Count; i++)
+                    {
+                        if (OrdDs.Tables["HF_CrdIF"].Rows[i]["PreData"].ToString().Trim() == "C" || OrdDs.Tables["HF_CrdIF"].Rows[i]["PreData"].ToString().Trim() == "N")
+                        {
+                            iCount++;
+                        }
+                    }
+                    if (iCount > 0)
+                    {
+                        //카드IF번호 채번(신규카드 + 취소 카드만 채번한다)
+                        // DataSet ifNoDS = GetIFNo(0, 1);
+                        //OrdDs.Tables["HF_CrdIF"].Rows[0]["CrdIFNo"] = ifNoDS.Tables[0].Rows[0][0].ToString();
+
+                        // IF번호 Setting
+                        //MatchFeeNo(OrdDs.Tables["HF_CrdIF"], ifNoDS.Tables["CrdIF"], false);
+                        //OrdDs.AcceptChanges();
+                        //
+
+
+                        //카드IF번호 채번(신규카드 + 취소 카드만 채번한다)
+                        DataSet ifNoDS = GetIFNo(0, iCount);
+
+                        // IF번호 Setting
+                        MatchFeeNo(OrdDs.Tables["HF_CrdIF"], ifNoDS.Tables["CrdIF"], false);
+                        //CrdDt.AcceptChanges();
+
+                        // 카드 승인 요청을 한다. 
+                        // 기존 카드의 취소 요청도 한다. 
+                        //if (!ReqCrdAdmitCanel(pUnitNo, pDeptCd, ref CrdDt))
+                        //{
+                        //    CrdDt.RejectChanges();
+                        //    CrdDt = beforeCrdFiltering; // 원래의 모습으로 
+
+                        //    // 리턴 값 셋팅 "N" --> 오류 발생 수납을 중지하라
+                        //    _reHt["Approval"] = "N";
+                        //    _reHt["HF_CrdIF"] = null;	// 오류 발생 시에는 Null 을 보낸다. 
+                        //    return _reHt;
+                        //}
+
+
+
+                    }
+                    //OrdDs.Tables.Remove("HF_CrdIF");
+
+                    //    // 승인을 얻었는지를 질의한다. 
+                    //    if ( CrdHt["Approval"].ToString().Equals("Y") && CrdDt != null  && CrdDt.Rows.Count > 0  )	
+                    //    {	
+                    //        CrdDt.TableName = "HF_CrdIF"; 
+                    //        OrdDs.Merge(CrdDt); 
+
+                    //        boolCrdAdmit = true;	// 카드 승인이 났음을 알린다. 
+
+                    //        if ( grbCrdDt != null )
+                    //        {
+                    //            grbCrdDt.Clear();
+                    //        }
+
+                    //        grbCrdDt = CrdDt.Clone();		// 카드 승인난 내역을 들고 있는다. 
+                    //        DataRow[] admitCrdDr = CrdDt.Select(" PreData ='N' ");	// 승인 정보만 얻어온다. 
+
+                    //        for ( int i=0; i < admitCrdDr.Length ; i++)
+                    //        {
+                    //            // 카드의 정보만 담는다.  
+                    //            grbCrdDt.Rows.Add((object[]) admitCrdDr[i].ItemArray.Clone() ); 
+                    //        } 
+                    //    }
+                    //    else if( CrdHt["Approval"].ToString().Equals("H") ){}
+                    //    else
+                    //    {
+                    //        // 수납을 중지한다 NULL 반환
+                    //        if (isExistCrd)
+                    //        {
+                    //            if( OrdDs.Tables.Contains("HF_CrdIF")){ OrdDs.Tables.Remove("HF_CrdIF");}
+                    //            OrdDs.Merge(beforeCrdFiltering); 
+                    //        }
+
+                    //        if ( boolCrdAdmit & grbCrdDt != null )
+                    //        {
+                    //            _oCrdCach.prtAcptProc = "AmbAcpt";	// 외래수납
+                    //            _oCrdCach.prtApprovalCancelGb = "Cancel"; // 승인
+                    //            _oCrdCach.prtChosNo = OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString(); 
+                    //            _oCrdCach.prtUnitNo  = pUnitNo;
+                    //            _oCrdCach.prtCrdCashGb = "Card"; 	
+                    //            _oCrdCach.prtBilNo = ""; 
+                    //            _oCrdCach.strHosCd = pHosCd; 
+
+                    //            _oCrdCach.CancelAdmiCashDT( pUnitNo, pDeptCd, grbCrdDt ); 
+
+                    //            _oCrdCach.LogWrite(); 
+                    //            boolCrdAdmit = false; 
+                    //        }
+
+                    //        facade.AmbAcptLogWrite(OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString(), pUnitNo, "AmbAcpt", pUserId, "O", "",  
+                    //            "WinUI", "카드 승인 실패 LogGb ='AmbCrd', LogGb ='AmbCrdCn'으로 조회확인 " ); 
+
+                    //        return  GetErrorDt( "", "ERR_PERMCRD","카드인증시오류", "B"); 
+                    //    }
+                    //}
+                    //else if ( OrdDs.Tables.Contains("HF_CrdIF") && OrdDs.Tables["HF_CrdIF"].Rows.Count <= 0 )
+                    //{
+                    //    OrdDs.Tables.Remove("HF_CrdIF"); 
+                    //}
+
+                    #endregion
+                }
+
+                // 리턴 = 영수증 테이블 
+                dt = _FEEFacade.SaveAcptCalc(OrdDs, hosCd, unitNo, MOBILE_WINDID, MOBILE_USER);
+
+            }
+            catch (Exception Ex)
+            {
+                #region Excpetion 처리
+
+                /* 모바일에서는 필요없을듯 - 익셉션나면 새로 호출해야되니
+                if (isExistCrd)
+                {
+                    if (OrdDs.Tables.Contains("HF_CrdIF")) { OrdDs.Tables.Remove("HF_CrdIF"); }
+                    OrdDs.Merge(beforeCrdFiltering);
+                }
+
+                if (isExistCash)
+                {
+                    if (OrdDs.Tables.Contains("HF_CashIF")) { OrdDs.Tables.Remove("HF_CashIF"); }
+                    OrdDs.Merge(beforeCashFiltering);
+                }*/
+
+                // 카드 승인 후, 수납 오류가 발생하면 ... 방금 승인을 한 내역에 대해 취소 처리를 한다. 
+                //if (boolCrdAdmit & grbCrdDt != null )
+                //{
+                //    _oCrdCach.prtAcptProc = "AmbAcpt";	// 외래수납
+                //    _oCrdCach.prtApprovalCancelGb = "Cancel"; // 승인
+                //    _oCrdCach.prtChosNo = OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString(); 
+                //    _oCrdCach.prtUnitNo  = pUnitNo;
+                //    _oCrdCach.prtCrdCashGb = "Card"; 	
+                //    _oCrdCach.prtBilNo = ""; 
+
+                //    _oCrdCach.CancelAdmiCrdDT( pUnitNo,pDeptCd, grbCrdDt); 
+                //    // 수납 오류 시 Log를 기록한다. 
+                //    _oCrdCach.LogWrite(); 
+                //    boolCrdAdmit = false; 
+
+                //    if ( grbCrdDt != null ) grbCrdDt.Clear(); 
+                //    grbCrdDt = null; 
+                //}
+
+
+
+                //HIS.Facade.HP.FEE.FEEFacade _logFacade = new HIS.Facade.HP.FEE.FEEFacade();
+
+                string[] err = Ex.Message.Trim().Split('§');
+
+                // Biz 에서 발생 시 : 내원번호 + "§" + 로그 위치 + "§" + 에러 메시지 
+
+                string logChosNo = string.Empty;
+                string logLogDesn = string.Empty;
+                string logLogMsg = string.Empty;
+                string logLogMsg2 = string.Empty;
+                string logLogMsg3 = string.Empty;
+
+                bool isVerific = false;
+
+                if (err.Length >= 3)	// 서버에서 오류 발생 
+                {
+                    logChosNo = err[0].Trim();
+                    logLogDesn = err[1].Trim();
+                    logLogMsg = err[2].Trim();
+
+                    if (err.Length == 4)
+                    {
+                        logLogMsg2 = err[3].Trim();	// 에러 메시지 2 
+                    }
+
+                    if (err.Length == 5)
+                    {
+                        logLogMsg3 = err[4].Trim();	// 에러 메시지 3 
+                    }
+
+                    // 서버 오류 시 외래 금액 검증 용인지를 확인한다. 
+                    if (logLogMsg.IndexOf("HP_Verific") > 1)
+                    {
+                        //모바일에서 안해도될듯
+                        AcptVerificFiltering(logChosNo, logLogDesn, logLogMsg, unitNo, MOBILE_USER);
+                        isVerific = true;
+                    }
+                }
+                else	// 클라이언트에서 발생  
+                {
+                    logChosNo = OrdDs.Tables["Ord"].Rows.Count > 0 ? OrdDs.Tables["Ord"].Rows[0]["ChosNo"].ToString() : "";
+                    logLogDesn = "MOBILE";//20180104
+                    logLogMsg = Ex.Message;
+                }
+
+
+                if (!isVerific)
+                {
+                    _FEEFacade.AmbAcptLogWrite(logChosNo, unitNo, "AmbAcpt", MOBILE_USER, "O", "", logLogDesn, logLogMsg);
+
+                    _FEEFacade.LogWrite(logChosNo, unitNo, "AmbAcpt", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("yyyyMMdd"),
+                        logLogDesn, logLogMsg, MOBILE_USER, "O", "", logLogMsg2, logLogMsg3);
+
+                }
+
+                #endregion
+
+                FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+                //return GetErrorDt("", "ERR_ACPTSAV", "수납시오류발생", "B");
+                AcptResult.Rows[0]["ErrorMsg"] = "수납시오류발생";
+                AcptResult.Rows[0]["ResultCd"] = "N";
+                return AcptResult;
+
+            }// CatCh 
+
+            //if (dt == null || dt.Rows.Count <= 0)
+            //{
+            //    //return GetErrorDt("", "ERR_ACPTSAV", "수납시오류발생", "B");
+            //    AcptResult.Rows[0]["ErrorMsg"] = "수납시오류발생";
+            //    AcptResult.Rows[0]["ResultCd"] = "N";
+            //    return AcptResult;
+            //}
+
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                AcptResult.Rows[0]["BillNo"] = dt.Rows[0]["BillNo"].ToString();
+                AcptResult.Rows[0]["ResultCd"] = "Y";
+                AcptResult.Rows[0]["HosoOrdNo"] = dt.Rows[0]["HosoOrdNo"].ToString();
+                AcptResult.Rows[0]["ErrorMsg"] = "";
+            }
+            else
+            {
+                AcptResult.Rows[0]["ErrorMsg"] = "수납 처리 실패 하였습니다.";
+                AcptResult.Rows[0]["ResultCd"] = "N";
+            }
+
+            //이것도 모바일에서 필요없음.
+            // 성공을 했을 경우이므로, 카드 및 현금 영수증을 백업 받은 데이터를 초기화 한다. 
+            //boolCashAdmit = false;
+            //boolCrdAdmit = false;
+            //if (grbCrdDt != null) grbCrdDt.Clear();
+            //if (grdCashDt != null) grdCashDt.Clear();
+
+            //모바일 UnitNo조회시  무조건 원복
+            FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
+
+            return AcptResult;
+        }
+
+        public DataSet SelectRcptContByChosNo_MOB3(string pUnitNo, string pHosCd, string pChosNo, string gb)
+        {
+            //string pUserid = "MOBILE";
+            //if (pUserid.Length >= 8)
+            //    pUserid = pUserid.Substring(0, 8);
+
+            DataSet ds = null;
+            DataSet _result = null;
+
+            //strHosCd = pHosCd;		// 병원코드를 넣는다. 
+            //strUnitNo = pUnitNo;	// 등록번호를 입력 
+            //strUserid = MOBILE_USER;	// UserId
+
+            try
+            {
+                //HIS.Facade.HP.FEE.FEEFacade facade = new HIS.Facade.HP.FEE.FEEFacade();
+
+                // 등록번호별로 무인수납 불가대상을 선별한다. 
+
+
+                #region ● KIOSK 에서 환자에 대한 수납 불가 여부를 조회한다.
+
+                Hashtable pht = new Hashtable();
+                pht.Add("TRNSGB", "N");
+                pht.Add("SPGB", "KIOSK_GETPATINFO");
+                pht.Add("UnitNo", pUnitNo);
+                pht.Add("TermId", MOBILE_USER);
+
+                if (CheckAcptPsbl)
+                {
+                    // 데이터 조회 : 강승숙 선생님의 SP 실행
+                    DataSet AcptPsbl = _FEEFacade.HpEtcDs(pht);
+
+                    errDt = KIOSKAcptPsbl(AcptPsbl, "KIOSKAcptPsbl", null);
+
+                    if (errDt != null)
+                    {
+                        DataSet returnDs = new DataSet();
+                        returnDs.Merge(errDt);
+                        return returnDs;
+                    }
+
+                    // 환자 정보에 대한 처리 
+                    DataSet patInfoDs = _FEEFacade.SelectAcptContByChosNo(pUnitNo, pHosCd);
+
+                    errDt = KIOSKAcptPsbl(patInfoDs, "UnitNo", null);
+
+                    if (errDt != null)
+                    {
+                        DataSet returnDs = new DataSet();
+                        returnDs.Merge(errDt);
+                        return returnDs;
+                    }
+                }
+
+                #endregion
+
+
+                // 내원건을 뽑아오잒~
+                ds = _FEEFacade.SelectRcptContByChosNo(pUnitNo, "", "", pHosCd, gb);//시행예정일 파라미터 변수로 전달
+
+                if (ds != null && ds.Tables.Count > 0 && ds.Tables.Contains("RcptCont") && ds.Tables["RcptCont"].Rows.Count > 0)
+                {
+                    // RH 과이면서, 진료일자가 오늘이 아닌 과는 모두 삭제한다. 
+                    // 추후 내원사유( ChosResnCd ) 를 판단해서, 물리치료(E) 인 것만 골라내도록 한다. 
+                    //	추후 반영 SP :	USP_HP_FEE_OP_AmbAcptDA_SelectRcptContByChosNoA
+                    // 접수일자 가 오늘 이고 물리치료(E) 일경우 수납내역 표시
+                    // 접수일자 오늘이 아니고 물리치료(E) 일경우 수납내역 표시 안함
+
+                    //[11.10.13]신촌도 적용(SM-11-01425)if (IFUtil.IsYD())		/*IFUtil.GetLocationCd() == "10"*/	// 영동일 경우 
+                    //[11.10.13]{
+                    string toDayClnYmd = DateTime.Now.ToString("yyyyMMdd");		// ClnYmdDt
+
+                    // [07.02.19]
+                    // string selectedContent = "TRIM(ClnDeptCd) LIKE 'RH' "; 
+                    string selectedContent = " TRIM(ChosResnCd) LIKE 'E' ";
+                    selectedContent += "AND TRIM(ClnYmdDt) NOT LIKE '" + toDayClnYmd + "'";
+
+                    DataRow[] deleteRow = ds.Tables["RcptCont"].Select(selectedContent);
+                    if (deleteRow.Length > 0)
+                    {
+                        for (int i = 0; i < deleteRow.Length; i++)
+                        {
+                            ds.Tables["RcptCont"].Rows.Remove(deleteRow[i]);
+                        }
+                    }
+                    //[11.10.13]}
+                }
+
+                ds.Tables["RcptCont"].AcceptChanges();
+                ds.AcceptChanges();
+                DataTable _dt = ds.Tables["RcptCont"];	//접수 내역만 얻어온다.
+
+                //내원번호다른것 날림
+                DataRow[] _dr = ds.Tables["RcptCont"].Select(" ChosNo <>'" + pChosNo + "'");
+                if (_dr.Length > 0)
+                {
+                    for (int i = 0; i < ds.Tables["RcptCont"].Rows.Count; i++) ds.Tables["RcptCont"].Rows.Remove(_dr[i]);
+                }
+                // 내원번호 별로 진료비를 계산하자~
+                _result = SetRcptFee(ref ds, pUnitNo, pHosCd);
+
+                pht.Clear();
+                pht = null;
+
+                pht = new Hashtable();
+                pht.Add("UnitNo", pUnitNo);
+                pht.Add("HosCd", pHosCd);
+
+                if (_result == null) return null;
+
+                _result = _FEEFacade.ChkKIOSKExcept(_result);
+
+                if (_result == null) return null;
+
+                if (CheckAcptPsbl)
+                {
+                    errDt = KIOSKAcptPsbl(_result, "ChosNo", pht);
+
+                    // KIOSK 불가 대상을 내원번호 별로 선별하자 
+                    if (errDt != null)
+                    {
+                        // KIOSK 불가 대상일 경우 
+                        DataSet returnDs = new DataSet();
+                        returnDs.Merge(errDt);
+                        return returnDs;
+                    }
+                }
+            }
+            catch (Exception Ex)
+            {
+                DataSet returnDs = new DataSet();
+                returnDs.Merge(GetErrorDt("", "ERR_GETRCPTINFO", "접수내역확인", "B"));
+                return returnDs;
+            }
+
+            // 이상이 없을 경우
+            // 혹시 ERROR_MSG 가 있으면 삭제한다. 
+            if (_result.Tables.Contains("ERROR_MSG"))
+                _result.Tables.Remove("ERROR_MSG");
+
+            return _result;
+        }
+
         private DataSet CalcFeeAmt(DataSet ordDs, string chosNo, int remitAmtv)
         {
             try
             {
-                return _FEEFacde.GetAmbAcptPayAmt(ordDs, chosNo, remitAmtv);
+                return _FEEFacade.GetAmbAcptPayAmt(ordDs, chosNo, remitAmtv);
             }
             catch (Exception ex)
             {
@@ -562,14 +1661,14 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
         private DataSet AcptOrdByChosNo(DataSet ordDs, string chosNo, bool checkRcpt)
         {
-            DataSet OrdDsChosNo = new DataSet();	// 리턴을 할, 실제 수납에 저장을 할 데이터 셋
+            DataSet OrdDsChosNo = new DataSet();    // 리턴을 할, 실제 수납에 저장을 할 데이터 셋
 
             // 예약건 Dt 
             //			DataTable _reservation = new DataTable("ResvBillDT"); 
             //			_reservation.Columns.Add("ChosNo", typeof(string )) ;		// 접수 건
             //			_reservation.Columns.Add("ResvChosNo", typeof(string )) ;	// 예약 건
 
-            
+
 
             try
             {
@@ -678,17 +1777,32 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             return OrdDsChosNo;
         }
 
+        #region ▣	외래 수납  #3.2	 ♣ AcptGb 변경
+        /// <summary>
+        /// 수납 시 필요한 AcptGb를 셋팅한다. 
+        /// </summary>
+        /// <param name="OrdDs"></param>
+        public void AcptGbSet(ref DataSet OrdDs)
+        {
+            // 이 부분은 추후 수정 계획
+            OrdDs.Tables["Ord"].Rows[0]["AcptGb"] = "2";
+
+            OrdDs.AcceptChanges();
+        }
+
+        #endregion 
+
         private DataTable GetErrorDt(string errchosNo, string errcode, string errvalue, string deeth)
         {
-            ErrDt = MakeErrorDt();
+            errDt = MakeErrorDt();
 
-            ErrDt.Rows[0]["ChosNo"] = errchosNo;
-            ErrDt.Rows[0]["ERROR_CODE"] = errcode;
-            ErrDt.Rows[0]["ERROR_MSG"] = errvalue;
-            ErrDt.Rows[0]["DEEPTH"] = deeth;
+            errDt.Rows[0]["ChosNo"] = errchosNo;
+            errDt.Rows[0]["ERROR_CODE"] = errcode;
+            errDt.Rows[0]["ERROR_MSG"] = errvalue;
+            errDt.Rows[0]["DEEPTH"] = deeth;
 
-            ErrDt.AcceptChanges();
-            return ErrDt;
+            errDt.AcceptChanges();
+            return errDt;
         }
 
         private DataTable MakeErrorDt()
@@ -836,6 +1950,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             _dt.Columns.Add("PreData", typeof(System.String));
             _dt.Columns.Add("ChosGb", typeof(System.String));
             _dt.Columns.Add("SubCheck", typeof(System.String));
+            _dt.Columns.Add("CrdTypeGb", typeof(System.String));
             //[IC카드-2018-1차필수]
             _dt.Columns.Add("VanSeqNo", typeof(System.String));//거래고유번호※카드 취소를 위해 필요한  거래고유번호 실물 카드가 아닌 내부 카드 취소를 위한 번호로 승인 시 받은 거래 고유번호 (VAN_SEQNO)=ParseString(106,12)
             _dt.Columns.Add("CrdPermMeth", typeof(System.String));//카드승인방법  MR 또는 빈값:과거 dll 승인 방식  IC: 이지카드 승인 방식
@@ -852,7 +1967,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
             try
             {
-                OrdDs = _FEEFacde.SelectOrdByChosNo(chosNo, clnDeptCd, hosCd, unitNo, sugaAppYmd, viewGb);
+                OrdDs = _FEEFacade.SelectOrdByChosNo(chosNo, clnDeptCd, hosCd, unitNo, sugaAppYmd, viewGb);
 
 
 
@@ -860,7 +1975,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 // 기존 카드 수납 건[카드 등]에 대한 처리 
                 ArrayList chosNoList = new ArrayList();
                 chosNoList.Add(chosNo);
-                CardDt = _FEEFacde.SelectAmbCrdAcptByChosNoList_AmbCrdAcptNTx(chosNoList);
+                CardDt = _FEEFacade.SelectAmbCrdAcptByChosNoList_AmbCrdAcptNTx(chosNoList);
 
                 // DataRow 가 1개라도 있을 경우에만 Merge를 한다. 
                 if (CardDt.Rows.Count > 0)
@@ -881,7 +1996,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
         {
             try
             {
-                return _FEEFacde.KIOSKAcptPsblDt(ordDs, psblGb, pht, HosCd, UnitNo, UserId);
+                return _FEEFacade.KIOSKAcptPsblDt(ordDs, psblGb, pht, strHosCd, strUnitNo, strUserid);
             }
             catch (Exception ex)
             {
@@ -906,12 +2021,447 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             Ord.Columns.Add("CalcStrYmd");	//중간금 계산 시작 일자
             Ord.Columns.Add("CalcEndYmd");	//중간금 계산 종료 일자
             Ord.Columns.Add("ChosGb");	//진료유형(O:외래,I:입원,E:응급)
-            Ord.Columns.Add("MainSubInsuNo");	//보험주부유형. M(주), S(부)
+            Ord.Columns.Add("InfoMsg");//고객 센터 연결 정보
             Ord.Columns.Add("ErrorMsg");	//
             Ord.Columns.Add("PatNm");
             Ord.Columns.Add("UnitNo");
+            Ord.Columns.Add("DisCalcYn");
+            Ord.Columns.Add("PharmCnt");
+            Ord.Columns.Add("OtherCnt");
+            return Ord;
+        }
+        public DataTable getPaymentOPDTable()
+        {
+            DataTable Ord = new DataTable("Ord");
+
+            Ord.Columns.Add("HosCd");	    //병원코드
+            Ord.Columns.Add("UnitNo");	//환자번호
+            Ord.Columns.Add("PatNm");	//환자명
+            Ord.Columns.Add("MCareOrdId"); //엠케어에서 생성
+            Ord.Columns.Add("MCareSiteId");	//엠케어환경설정값
+            Ord.Columns.Add("ChosNo");		//접수번호(cretno)
+            Ord.Columns.Add("ClnYmd");	//외래방문일
+            Ord.Columns.Add("ClnHms");	//외래방문시간
+            Ord.Columns.Add("MCarePayAll");	//부분결제 여부
+            Ord.Columns.Add("ChosGb");	//진료유형(O:외래,I:입원,E:응급)
+            Ord.Columns.Add("PayAmt");	//총액
+            Ord.Columns.Add("AddTaxAmt");	//부가세
+            Ord.Columns.Add("McareServiceAmt");	//서비스료
+            Ord.Columns.Add("McareApproval");	//엠케어환경설정값
+            Ord.Columns.Add("ErrorMsg");	//
+            Ord.Columns.Add("DisCalcYn");
+            Ord.Columns.Add("PharmCnt");
+            Ord.Columns.Add("OtherCnt");
 
             return Ord;
+        }
+        public DataTable makeAcptResultDt()
+        {
+            DataTable AcptResult = new DataTable("AcptResult");
+
+            AcptResult.Columns.Add("HosCd");	    //
+            AcptResult.Columns.Add("ResultCd");	    //
+            AcptResult.Columns.Add("ErrorMsg");	//
+            AcptResult.Columns.Add("BillNo");	    //
+            AcptResult.Columns.Add("HosoOrdNo");	//
+            DataRow addRow = AcptResult.NewRow();
+            AcptResult.Rows.Add(addRow);
+
+
+            return AcptResult;
+        }
+
+        private bool Check_Ord_LstUpDt(ref DataSet ordDs)
+        {
+            DataTable ordDt = ordDs.Tables["Ord"].Copy();
+            DataSet returnDs = null;
+
+            string pChosNo = string.Empty;
+
+            bool boolvalue = true;
+
+            string RcptMsg = string.Empty;
+
+
+            foreach (DataRow ordrw in ordDt.Rows)
+            {
+                Hashtable _pht = new Hashtable();
+
+                _pht.Add("TRNSGB", "N");
+                _pht.Add("SPGB", "ComPareLstOrdDt");
+
+                pChosNo = ordrw["ChosNo"].ToString();
+                _pht.Add("ChosNo", pChosNo);
+
+                if (ordrw["OrdLstUpdDt"] == DBNull.Value)
+                {
+                    _pht.Add("OrdLstUpdDt", null);
+                }
+                else
+                {
+                    _pht.Add("OrdLstUpdDt", (System.DateTime)ordrw["OrdLstUpdDt"]);
+                }
+
+                /* TODO : YUMC_Change_Start(20061113, By 박성용) */
+                /*	수납 전 유효한 영수증에 대한 체크 */
+
+                if (ordDt.Columns.Contains("VldBilNo"))
+                {
+                    if (ordrw["VldBilNo"] != null && ordrw["VldBilNo"] != DBNull.Value)
+                    {
+                        _pht.Add("VldBilNo", ordrw["VldBilNo"].ToString().Trim());
+                    }
+                    else
+                    {
+                        _pht.Add("VldBilNo", "");
+                    }
+                }
+                else
+                {
+                    _pht.Add("VldBilNo", "NOT_CHECK");	// 수납영수증을 체크하지 말아라~
+                }
+                /* YUMC_Change_End(20061113, By 박성용)*/
+
+                //HIS.Facade.HP.FEE.FEEFacade _controller = new HIS.Facade.HP.FEE.FEEFacade();
+                returnDs = _FEEFacade.HpEtcDs(_pht);
+
+                if (returnDs == null || returnDs.Tables.Count <= 0)
+                {
+                    if (boolvalue) boolvalue = true;
+                }
+                else
+                {
+                    boolvalue = false;
+                }
+            }
+
+            return boolvalue;
+        }
+
+        #region 매입처코드별 카드계정코드를 조회한다. : GetAccCd
+        //매입처코드별 카드계정코드를 조회한다.
+        /// <summary>
+        /// 007   신한카드
+        /// 008   외환카드
+        /// 016   국민카드
+        /// 026   비씨카드
+        /// 027   현대카드
+        /// 029   엘지카드
+        /// 031   삼성카드
+        /// 047   롯데카드
+        /// </summary>
+        /// <param name="pInpurcCd"></param>
+        /// <returns></returns>
+        private string GetAccCd(string pInpurcCd)
+        {
+            /*
+                CrdAcc	카드-계정매칭	007	S104	신한카드
+                CrdAcc	카드-계정매칭	008	S103	외환카드
+                CrdAcc	카드-계정매칭	016	S102	국민카드
+                CrdAcc	카드-계정매칭	026	S101	비씨카드
+                CrdAcc	카드-계정매칭	027	S204	현대카드
+                CrdAcc	카드-계정매칭	029	S201	엘지카드
+                CrdAcc	카드-계정매칭	031	S202	삼성카드
+                CrdAcc	카드-계정매칭	047	S203	롯데카드
+              
+                CrdAcc	카드-계정매칭	041	S211	농협(굳센)카드
+                CrdAcc	카드-계정매칭	018	S212	농협(NH)카드
+             */
+
+            if (pInpurcCd == "007") return "S104";
+            if (pInpurcCd == "008") return "S103";
+            if (pInpurcCd == "016") return "S102";
+            if (pInpurcCd == "026") return "S101";
+            if (pInpurcCd == "027") return "S204";
+            if (pInpurcCd == "029") return "S201";
+
+            //전일환 TEST위해 수정
+            if (pInpurcCd == "001") return "S201";
+
+            if (pInpurcCd == "031") return "S202";
+            if (pInpurcCd == "047") return "S203";
+
+            //[2012.09.05]광주관련 추가
+            if (pInpurcCd == "041") return "S211";
+            if (pInpurcCd == "018") return "S212";
+
+            return "";
+        }
+        #endregion
+
+        /// <summary>
+        /// 카드 수납 시 기존 금액에 대해, 신규 요청액을 합산한다. 
+        /// 
+        /// 1. OrdDs 의 Ord 에서 내원번호 별로 뽑아내어서, cardDt에서 내원 번호별로 DataRow[] 를 얻는다. 
+        /// 2. 내원 번호별 카드 에서, 신규 요청액 ( PreData ='' )의 금액을 
+        ///		 OrdDs 의 Ord 내의 CrdAcptAmt와 합산한다. 
+        ///			/// 
+        /// </summary>
+        /// <param name="OrdDs"></param>
+        /// <param name="cardDt"></param>
+        private void SetCardDtAndOrdByAcpt(ref DataSet OrdDs)
+        {
+            string pchosNo = string.Empty;
+            DataRow[] aRow = null;
+            int iNewPermAmt = 0;
+
+            DataTable cardDt = OrdDs.Tables["HF_CrdIF"];
+
+            for (int i = 0; i < OrdDs.Tables["Ord"].Rows.Count; i++)
+            {
+                pchosNo = OrdDs.Tables["Ord"].Rows[i]["ChosNo"].ToString();
+
+                aRow = cardDt.Select("ChosNo ='" + pchosNo + "'");
+                iNewPermAmt = 0;
+
+                for (int j = 0; j < aRow.Length; j++)
+                {
+                    if (aRow[j]["PreData"].ToString().Trim() == "")	// 신규 일때 
+                        iNewPermAmt += Convert.ToInt32(aRow[j]["PermAmt"].ToString().Replace(",", ""));
+                }
+
+                OrdDs.Tables["Ord"].Rows[i]["pAcptCrdAmt"] = Convert.ToInt32(OrdDs.Tables["Ord"].Rows[i]["CrdAcptAmt"].ToString().Replace(",", ""));
+                OrdDs.Tables["Ord"].Rows[i]["CnCrdAcptAmt"] = 0;
+                OrdDs.Tables["Ord"].Rows[i]["AcptNewCrdAmt"] = iNewPermAmt;
+
+                // 실제 db에 저장될 금엑 
+                OrdDs.Tables["Ord"].Rows[i]["CrdAcptAmt"] = Convert.ToInt32(OrdDs.Tables["Ord"].Rows[i]["CrdAcptAmt"].ToString().Replace(",", "")) + iNewPermAmt;
+
+                OrdDs.Tables["Ord"].Rows[i].EndEdit();
+            }
+        }
+
+        /* TODO : YUMC_Change_Start(20060524, By 박성용)
+		사유	신촌요구사항 */
+
+        /// <summary>
+        /// 수납 전 체크를 할 사항에 대해 
+        ///		[2006.05.24]	신용카드 결재 요청으로 응답을 받았을 경우.
+        ///						금액이 0 원인 데이터에 대해서는, 현금 결재 처리를 위해 
+        ///						해당 내원건의 HF_CrdIF 를 삭제한다. 
+        /// 
+        /// </summary>
+        public void CheckAmbAcptBefore(ref DataSet ds)
+        {
+            DataTable ord = ds.Tables["Ord"];       // Ord 테이블 
+            DataTable crd = ds.Tables["HF_CrdIF"];  // HF_CrdIF 테이블 
+
+            if (!crd.Columns.Contains("DelYnCols"))
+            {
+                crd.Columns.Add("DelYnCols", typeof(string));
+            }
+
+            string pchosno = string.Empty;
+            DataRow[] rRow = null;
+
+            int ipayamt = 0;
+
+            foreach (DataRow arow in ord.Rows)
+            {
+                pchosno = arow["ChosNo"].ToString().Trim();
+                rRow = crd.Select("ChosNo ='" + pchosno + "'");
+
+                for (int i = 0; i < rRow.Length; i++)
+                {
+                    rRow[i]["DelYnCols"] = "N";
+
+                    if (rRow[i]["PermAmt"] == null || rRow[i]["PermAmt"] == DBNull.Value ||
+                        rRow[i]["PermAmt"].ToString().Trim().Replace(",", "") == string.Empty)
+                        rRow[i]["PermAmt"] = 0;
+
+                    ipayamt = Convert.ToInt32(rRow[i]["PermAmt"]);
+
+                    if (ipayamt == 0)   // 0 원일 경우 
+                    {
+                        rRow[i]["DelYnCols"] = "Y"; // 삭제처리한다. 
+                    }
+                }
+            }
+
+            rRow = crd.Select(" DelYnCols ='Y'");
+
+            for (int i = 0; i < rRow.Length; i++)
+                crd.Rows.Remove(rRow[i]);
+
+
+            crd.AcceptChanges();
+        }
+
+        #region  ▣ 외래 수납   #4.1.1	 수납하는 금액을 검증합니다.
+
+        /// <summary>
+        /// 금액 검증
+        /// </summary>
+        /// <param name="ordDs"></param>
+        /// <param name="pUnitNo"></param>
+        /// <param name="pUserId"></param>
+        /// <returns></returns>
+        public bool AcptVerific(DataSet ordDs, string pUnitNo, string pUserId)
+        {
+            bool returnValue = true;
+
+            try
+            {
+                //HIS.Facade.HP.FEE.FEEFacade FEEFacade = new HIS.Facade.HP.FEE.FEEFacade();
+                returnValue = _FEEFacade.AcptVerific(ordDs, pUnitNo, pUserId);
+
+            }
+            catch (Exception Ex)
+            {
+                throw Ex;
+            }
+
+            return returnValue;
+        }
+
+        #endregion
+
+        #region 카드 Dt의 구분을 설정합니다.
+
+        //		PreData 설정 : 
+        // 
+        //		P	:	기존 승인 
+        //		C	:	기존 승인 취소 
+        //		-	:	신규 승인 취소 --> 삭제됨
+        //		N	:	신규 승인
+
+        public void CrdAcptDt(ref DataSet ordDs) //datatable->dataset으로변경
+        {
+            DataRow cRow = null;
+
+            for (int i = 0; i < ordDs.Tables["HF_CrdIF"].Rows.Count; i++)
+            {
+                cRow = ordDs.Tables["HF_CrdIF"].Rows[i];
+
+                // 기존 승인에 대한 취소건을 판단합니다. 
+                // 신규 승인에 대한 취소건은 화면에서 없어집니다. 
+
+                if (Convert.ToBoolean(cRow["CheckedCancel"]) & cRow["PreData"].ToString().Trim() == "P")
+                {
+                    cRow["PreData"] = "C";		// C : 기존 승인에 대한 취소 건 [P --> C ]
+                    continue;
+                }
+
+
+                // 취소 되지 않은 기존 승인 --> 그대로 P를 박아버린다. 
+                if (!Convert.ToBoolean(cRow["CheckedCancel"]) & cRow["PreData"].ToString().Trim() == "P")
+                {
+                    cRow["PreData"] = "P";
+                    continue;
+                }
+
+
+                if (!Convert.ToBoolean(cRow["CheckedCancel"]) & cRow["PreData"].ToString().Trim() == "")	// 이건 신규 승인 요청건 
+                {
+                    cRow["PreData"] = "N";		// N : 기존 승인에 대한 취소 건
+                    continue;
+                }
+
+                // 만일 이런 황당한 건이 발생 시에는 원천봉쇄를 한다. 
+                if (cRow["PreData"].ToString().Trim() == "")
+                {
+                    throw new Exception("카드의 셋팅 정보가 불확실 합니다. 카드 정보를 다시 입력해 주십시요");
+                }
+
+                //				// 혹시나 딸려온 신규 승인 취소 요청 건 --> 강 삭제한다. 
+                //				if ( Convert.ToBoolean( cRow["CheckedCancel"]) & cRow["PreData"].ToString().Trim() =="" )	// 이건 신규 승인 취소 요청 건
+                //				{
+                //					cRow["PreData"] = "-";		// - : 기존 승인에 대한 취소 건
+                //					continue; 
+                //				}
+
+            }
+
+            // 신규 승인 요청건을 삭제한다. 
+            DataRow[] deleteCrd = ordDs.Tables["HF_CrdIF"].Select(" PreData ='-' ");
+
+            for (int d = 0; d < deleteCrd.Length; d++)
+            {
+                ordDs.Tables["HF_CrdIF"].Rows.Remove(deleteCrd[d]);
+            }
+        }
+
+        #endregion
+
+        #region 현금영수증, 카드IF 채번 : GetIFNo
+
+        /// <summary>
+        /// 현금영수증, 카드IF 채번
+        /// </summary>
+        /// <param name="pCashIFCount">현금영수증IF번호 채번수</param>
+        /// <param name="pCrdIFCount">카드IF번호 채번수</param>
+        /// <returns></returns>
+        public DataSet GetIFNo(int pCashIFCount, int pCrdIFCount)
+        {
+            Hashtable ht = new Hashtable();
+            ht.Add("CashIFCount", pCashIFCount);
+            ht.Add("CrdIFCount", pCrdIFCount);
+
+            //HIS.Facade.HP.FEE.FEEFacade facade = new HIS.Facade.HP.FEE.FEEFacade();
+            DataSet ds = _FEEFacade.SelectFeeNoList(ht);
+
+            return ds;
+        }
+
+
+        #endregion
+
+        // 공통메소드 
+        #region ★ 공통 메소드(MatchFeeNo) IF 번호 매치
+
+        /// <summary>
+        /// IF번호를 매치시킨다.
+        /// </summary>
+        /// <param name="OrdDt">현금 및 카드 Dt</param>
+        /// <param name="FeeDt">IF 번호 DT</param>
+        /// <param name="isCash">True : 현금영수증승인, False 카드승인</param>
+        public void MatchFeeNo(DataTable OrdDt, DataTable FeeDt, bool isCash)
+        {
+            //현금 영수증인가?
+            if (isCash)
+            {
+                for (int i = 0; i < OrdDt.Rows.Count; i++)
+                {
+                    // 현금영수증 IFNo 에 새로 얻은 카드 IFNO를 매치시킨다. 
+                    OrdDt.Rows[i]["CashBilIFNo"] = FeeDt.Rows[i]["IFNo"];
+                }
+            }
+            //카드인가?
+            else
+            {
+                int Idx = 0;
+
+                // 기존 승인 건에 대한 취소 : PreData = 'C'
+                // 신규 승인 요청 건에 대한 요청 : PreData = 'N'
+                for (int i = 0; i < OrdDt.Rows.Count; i++)
+                {
+                    if (OrdDt.Rows[i]["PreData"].ToString().Trim() == "N"
+                        || OrdDt.Rows[i]["PreData"].ToString().Trim() == "C")
+                    {
+                        //	카드 테이블의 IFNo를 매치
+                        OrdDt.Rows[i]["CrdIFNo"] = FeeDt.Rows[Idx]["IFNo"];
+                        Idx++;
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// 수납 검증 메시지 처리 및 DB에 저장
+        /// </summary>
+        private void AcptVerificFiltering(string logChosNo, string logLogDesn, string logLogMsg, string pUnitNo, string pUserid)
+        {
+            string[] err = logLogMsg.Trim().Split('$');
+            string[] errsub = err[1].Split('%');
+
+            // 로그를 기록한다. 
+            //HIS.Facade.HP.FEE.FEEFacade _logFacade = new HIS.Facade.HP.FEE.FEEFacade();
+
+            _FEEFacade.LogWrite(logChosNo, pUnitNo, "AmbVerific", DateTime.Now.ToString("yyyyMMdd"), DateTime.Now.ToString("yyyyMMdd"), errsub[1],
+                errsub[2], pUserid, "O", "", errsub[3], errsub[4]);
+
         }
     }
 }

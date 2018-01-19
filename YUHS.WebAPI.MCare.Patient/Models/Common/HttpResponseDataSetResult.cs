@@ -6,7 +6,7 @@ using System.Web;
 
 namespace YUHS.WebAPI.MCare.Patient.Models.Common
 {
-    public class HttpResponseDataTableResult<T> where T: DataTable
+    public class HttpResponseDataSetResult<T> where T: DataSet
     {
         public T result { get; set; }
 

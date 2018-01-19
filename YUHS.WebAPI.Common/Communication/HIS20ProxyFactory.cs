@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.Common.Communication
         public interface NUTFacade
         {
             [OperationContract]
-            DataSet SelectMlOrderListByChosNo_DietReqNtx(string unitNo, string ordYmd);
+            DataSet SelectMlOrderListByChosNo_DietReqNtx(string pUnitNo, string pOrdYmd);
 
             [OperationContract]
             void InsertMlAddSpmen_DietReqNtx(Hashtable pTempHT, DataSet pTempDS);
@@ -32,8 +32,18 @@ namespace YUHS.WebAPI.Common.Communication
 
             [OperationContract]
             DataTable setRcptRscMapping(DataSet OrdDs);
+
+            [OperationContract]
+            DataSet ChkAdmiKIOSKPsbl(Hashtable pht);
+
+            [OperationContract]
+            int KIOSK_MAX_RetrSeq(Hashtable pht);
+
+            [OperationContract]
+            DataTable GET_KIOSK_BILLDATA(string pChosGb, string pDscYn, string pChosNo1, string pBillNo1, string pChosNo2, string pBillNo2, string HosCd, string PcNm, string RgtId, string pTotalPayAmtBilYn);
         }
 
+        [ServiceKnownType(typeof(DBNull))]
         [ServiceContract]
         public interface FEEFacade
         {
@@ -60,6 +70,36 @@ namespace YUHS.WebAPI.Common.Communication
 
             [OperationContract]
             DataTable KIOSKAcptPsblDt(DataSet ordDs, string PsblGb, Hashtable _pht, string strHosCd, string strUnitNo, string strUserId);
+
+            [OperationContract]
+            DataSet SelectAdmiDep_AdmiAcpNtx(Hashtable ht);
+
+            [OperationContract]
+            void LogWrite(string pChosNo, string pUnitNo, string pLogGb, string pAppFrYmd, string pAppToYmd, string pLogNm, string pLog1, string pUserid, string pChosGb, string pBilNo, string pLog2, string pLog3);
+
+            [OperationContract]
+            string SelectPgmLog_AdmiAcptNTx(string pChosNo);
+
+            [OperationContract]
+            DataSet SelectFeeNoList(Hashtable pHt);
+
+            [OperationContract]
+            string AdmiAcptCmpIt_AdmiAcptTx(Hashtable pHt1, DataSet pDS);
+
+            [OperationContract]
+            int UPDATE_HP_KIOSKAdmiPat(Hashtable pht);
+
+            [OperationContract]
+            int INSERT_HP_KIOSKBillInfo(string DOMAIN, int RetrSeq, string billNo1, string ChosNo1, string billNo2, string ChosNo2, string KIOSKID, DataTable billDt, string pBilGb);
+
+            [OperationContract]
+            DataTable SaveAcptCalc(DataSet OrdDs, string pHosCd, string pUnitNo, string pWindId, string pUserId);
+
+            [OperationContract]
+            bool AcptVerific(DataSet ordDs, string pUnitNo, string pUserId);
+
+            [OperationContract]
+            void AmbAcptLogWrite(string pChosNo, string pUnitNo, string pLogGb, string pUserId, string pChosGb, string pBilNo, string pErroLocation, string pLogMessage);
         }
         #endregion
 
@@ -153,6 +193,56 @@ namespace YUHS.WebAPI.Common.Communication
             {
                 return Channel.KIOSKAcptPsblDt(ordDs, psblGb, pht, hosCd, unitNo, userId);
             }
+
+            public DataSet SelectAdmiDep_AdmiAcpNtx(Hashtable ht)
+            {
+                return Channel.SelectAdmiDep_AdmiAcpNtx(ht);
+            }
+
+            public void LogWrite(string pChosNo, string pUnitNo, string pLogGb, string pAppFrYmd, string pAppToYmd, string pLogNm, string pLog1, string pUserid, string pChosGb, string pBilNo, string pLog2, string pLog3)
+            {
+                Channel.LogWrite(pChosNo, pUnitNo, pLogGb, pAppFrYmd, pAppToYmd, pLogNm, pLog1, pUserid, pChosGb, pBilNo, pLog2, pLog3);
+            }
+
+            public string SelectPgmLog_AdmiAcptNTx(string pChosNo)
+            {
+                return Channel.SelectPgmLog_AdmiAcptNTx(pChosNo);
+            }
+
+            public DataSet SelectFeeNoList(Hashtable pHt)
+            {
+                return Channel.SelectFeeNoList(pHt);
+            }
+
+            public string AdmiAcptCmpIt_AdmiAcptTx(Hashtable pHt1, DataSet pDS)
+            {
+                return Channel.AdmiAcptCmpIt_AdmiAcptTx(pHt1, pDS);
+            }
+
+            public int UPDATE_HP_KIOSKAdmiPat(Hashtable pht)
+            {
+                return Channel.UPDATE_HP_KIOSKAdmiPat(pht);
+            }
+
+            public int INSERT_HP_KIOSKBillInfo(string DOMAIN, int RetrSeq, string billNo1, string ChosNo1, string billNo2, string ChosNo2, string KIOSKID, DataTable billDt, string pBilGb)
+            {
+                return Channel.INSERT_HP_KIOSKBillInfo(DOMAIN, RetrSeq, billNo1, ChosNo1, billNo2, ChosNo2, KIOSKID, billDt, pBilGb);
+            }
+
+            public DataTable SaveAcptCalc(DataSet OrdDs, string pHosCd, string pUnitNo, string pWindId, string pUserId)
+            {
+                return Channel.SaveAcptCalc(OrdDs, pHosCd, pUnitNo, pWindId, pUserId);
+            }
+
+            public bool AcptVerific(DataSet ordDs, string pUnitNo, string pUserId)
+            {
+                return Channel.AcptVerific(ordDs, pUnitNo, pUserId);
+            }
+
+            public void AmbAcptLogWrite(string pChosNo, string pUnitNo, string pLogGb, string pUserId, string pChosGb, string pBilNo, string pErroLocation, string pLogMessage)
+            {
+                Channel.AmbAcptLogWrite(pChosNo, pUnitNo, pLogGb, pUserId, pChosGb, pBilNo, pErroLocation, pLogMessage);
+            }
         }
         #endregion
 
@@ -174,9 +264,9 @@ namespace YUHS.WebAPI.Common.Communication
                 Channel = Factory.CreateChannel();
             }
 
-            public DataSet SelectMlOrderListByChosNo_DietReqNtx(string unitNo, string ordYmd)
+            public DataSet SelectMlOrderListByChosNo_DietReqNtx(string pUnitNo, string pOrdYmd)
             {
-                return Channel.SelectMlOrderListByChosNo_DietReqNtx(unitNo, ordYmd);
+                return Channel.SelectMlOrderListByChosNo_DietReqNtx(pUnitNo, pOrdYmd);
             }
 
             public void InsertMlAddSpmen_DietReqNtx(Hashtable pTempHT, DataSet pTempDS)
@@ -198,6 +288,8 @@ namespace YUHS.WebAPI.Common.Communication
             private EndpointAddress Address { get; set; }
             private ChannelFactory<ZZZFacade> Factory { get; set; }
 
+            
+
             private ZZZFacade Channel { get; set; }
             public ZZZProxy()
             {
@@ -214,6 +306,21 @@ namespace YUHS.WebAPI.Common.Communication
             public DataTable setRcptRscMapping(DataSet ordDs)
             {
                 return Channel.setRcptRscMapping(ordDs);
+            }
+
+            public DataSet ChkAdmiKIOSKPsbl(Hashtable pht)
+            {
+                return Channel.ChkAdmiKIOSKPsbl(pht);
+            }
+
+            public int KIOSK_MAX_RetrSeq(Hashtable pht)
+            {
+                return Channel.KIOSK_MAX_RetrSeq(pht);
+            }
+
+            public DataTable GET_KIOSK_BILLDATA(string pChosGb, string pDscYn, string pChosNo1, string pBillNo1, string pChosNo2, string pBillNo2, string HosCd, string PcNm, string RgtId, string pTotalPayAmtBilYn)
+            {
+                return Channel.GET_KIOSK_BILLDATA(pChosGb, pDscYn, pChosNo1, pBillNo1, pChosNo2, pBillNo2, HosCd, PcNm, RgtId, pTotalPayAmtBilYn);
             }
         }
         #endregion

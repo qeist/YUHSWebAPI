@@ -188,6 +188,9 @@
     <Compile Include="Controllers\ArrivalController.cs" />
     <Compile Include="Controllers\CheckUpController.cs" />
     <Compile Include="Controllers\LabResultController.cs" />
+    <Compile Include="Controllers\LogController.cs" />
+    <Compile Include="Controllers\NutController.cs" />
+    <Compile Include="Controllers\TdrgController.cs" />
     <Compile Include="Controllers\VisitInfoHistoryController.cs" />
     <Compile Include="Controllers\CommonController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
@@ -201,19 +204,29 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Library\AcptAdmiLib.cs" />
     <Compile Include="Library\AcptLib.cs" />
+    <Compile Include="Library\NutLib.cs" />
     <Compile Include="Models\Arrive\ArriveConfirmTargetList.cs" />
     <Compile Include="Models\Arrive\ArrivedConfirm.cs" />
     <Compile Include="Models\CheckUp\CheckupDate.cs" />
     <Compile Include="Models\CheckUp\CheckupList.cs" />
     <Compile Include="Models\CheckUp\CheckupOpinion.cs" />
+    <Compile Include="Models\CheckUp\CheckupReservation.cs" />
     <Compile Include="Models\CheckUp\CheckupResult.cs" />
     <Compile Include="Models\CheckUp\GroupCodeSurvey.cs" />
     <Compile Include="Models\CheckUp\MasterCodeSurvey.cs" />
     <Compile Include="Models\CheckUp\MetabolicInfo.cs" />
     <Compile Include="Models\CheckUp\PatientInfoSurvey.cs" />
+    <Compile Include="Models\Common\HttpResponseDataSetResult.cs" />
     <Compile Include="Models\Common\HttpResponseDataTableResult.cs" />
     <Compile Include="Models\LabResult\LabResult.cs" />
+    <Compile Include="Models\Nut\AdmiChk.cs" />
+    <Compile Include="Models\Nut\AdMlOrd.cs" />
+    <Compile Include="Models\Nut\BasInfo.cs" />
+    <Compile Include="Models\Nut\MlOrdMList.cs" />
+    <Compile Include="Models\Tdrg\PatientCounseling.cs" />
+    <Compile Include="Models\Tdrg\PatientEducation.cs" />
     <Compile Include="Models\VisitInfoHistory\BillDetail.cs" />
     <Compile Include="Models\VisitInfoHistory\BillSum.cs" />
     <Compile Include="Models\Common\ExecuteResult.cs" />

@@ -170,8 +170,8 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
             }
         }
 
-        [Route("CheckUp/SaveCheckupSurvey/{hospitalCd}/{chosNo}/{grCd}/{papWeiList}/{userId}")]
-        public HttpResponseResult<ExecuteResult> SaveCheckupSurvey(string hospitalCd, string chosNo, string grCd, string papWeiList, string userId)
+        [Route("CheckUp/SaveCheckupSurvey/{hospitalCd}/{chosNo}/{grCd}/{userId}")]
+        public HttpResponseResult<ExecuteResult> SaveCheckupSurvey(string hospitalCd, string chosNo, string grCd, string userId, System.Net.Http.HttpRequestMessage papWeiList)
         {
             try
             {
@@ -179,7 +179,7 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
                 param.Add(name: "@ChosNo", value: chosNo, dbType: DbType.String, size: 14);
                 param.Add(name: "@GrCd", value: grCd, dbType: DbType.String, size: 10);
-                param.Add(name: "@PapWeiList", value: papWeiList, dbType: DbType.String);
+                param.Add(name: "@PapWeiList", value: papWeiList.Content.ReadAsStringAsync().Result, dbType: DbType.String);
                 param.Add(name: "@UserId", value: userId, dbType: DbType.StringFixedLength, size: 8);
 
                 SqlHelper.ExecuteProcess(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_saveCheckupSurvey", param: param);
@@ -190,6 +190,28 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
             catch (Exception ex)
             {
                 return new HttpResponseResult<ExecuteResult> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+        [Route("CheckUp/GetCheckupReservation/{hospitalCd}/{patientId}/{startDt}/{endDt}")]
+        public HttpResponseResult<CheckupReservation> GetCheckupReservation(string hospitalCd, string patientId, string startDt, string endDt)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@patientId", value: patientId, dbType: DbType.String, size: 10);
+                param.Add(name: "@startDt", value: startDt, dbType: DbType.StringFixedLength, size: 8);
+                param.Add(name: "@endDt", value: endDt, dbType: DbType.StringFixedLength, size: 8);
+
+                IEnumerable<CheckupReservation> info = SqlHelper.GetList<CheckupReservation>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getCheckupReservation", param: param);
+
+                return new HttpResponseResult<CheckupReservation> { result = info, error = new ErrorInfo { flag = false } };
+
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<CheckupReservation> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

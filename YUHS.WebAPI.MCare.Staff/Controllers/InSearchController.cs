@@ -134,5 +134,27 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 return new HttpResponseResult<InPatInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
+
+        [Route("InSearch/GetPatientInfo/{hosCd}/{unitNo}")]
+        public HttpResponseResult<PatientInfo> GetPatientInfo(string hosCd, string unitNo)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.StringFixedLength, size: 10);
+
+                IEnumerable<PatientInfo> info = SqlHelper.GetList<PatientInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getPatientInfo", param: param);
+
+                return new HttpResponseResult<PatientInfo> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<PatientInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+
+        }
+
+       
     }
 }
