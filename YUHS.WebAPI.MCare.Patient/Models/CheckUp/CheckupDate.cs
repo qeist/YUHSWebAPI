@@ -5,7 +5,7 @@
         public string hospitalCd { get; set; } = "";
         public string checkupDt { get; set; } = "";
         public string visitNo { get; set; } = "";
-        public string checkupTyp { get; set; } = "";
+        public string checkupTyp { get; set; } = ""; 
         public string checkupRstCfm { get; set; } = "";
     }
 }
