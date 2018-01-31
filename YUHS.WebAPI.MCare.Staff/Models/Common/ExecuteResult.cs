@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace YUHS.WebAPI.MCare.Patient.Models.Common
+namespace YUHS.WebAPI.MCare.Staff.Models.Common
 {
     public class ExecuteResult
     {

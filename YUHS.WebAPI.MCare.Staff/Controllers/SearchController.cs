@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Search;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class SearchController : ApiController
     {
         [Route("Search/GetSrPatListByName/{hosCd}/{patNm}")]
-        public HttpResponseResult<SrPatList> GetSrPatListByName(string hosCd, string patNm)
+        public HttpResponseResult<IEnumerable<SrPatList>> GetSrPatListByName(string hosCd, string patNm)
         {
             try
             {
@@ -24,17 +24,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<SrPatList> info = SqlHelper.GetList<SrPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSrPatListByName", param: param);
 
-                return new HttpResponseResult<SrPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<SrPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("Search/GetSrPatListById/{hosCd}/{unitNo}")]
-        public HttpResponseResult<SrPatList> GetSrPatListById(string hosCd, string unitNo)
+        public HttpResponseResult<IEnumerable<SrPatList>> GetSrPatListById(string hosCd, string unitNo)
         {
             try
             {
@@ -44,17 +44,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<SrPatList> info = SqlHelper.GetList<SrPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSrPatListById", param: param);
 
-                return new HttpResponseResult<SrPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<SrPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("Search/GetSrPatListByDW/{hosCd}/{deptCd}/{ward}")]
-        public HttpResponseResult<SrPatList> GetSrPatListByDW(string hosCd, string deptCd, string ward)
+        public HttpResponseResult<IEnumerable<SrPatList>> GetSrPatListByDW(string hosCd, string deptCd, string ward)
         {
             try
             {
@@ -65,11 +65,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<SrPatList> info = SqlHelper.GetList<SrPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSrPatListByDW", param: param);
 
-                return new HttpResponseResult<SrPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<SrPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<SrPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }

@@ -10,7 +10,7 @@
         public string drugEffect { get; set; }
         public string drugStorage { get; set; }
         public string drugGuideNm { get; set; }
-        public string durgGuidetxt { get; set; }
+        public string drugGuidetxt { get; set; }
         public string drugPhoto { get; set; }
 
     }

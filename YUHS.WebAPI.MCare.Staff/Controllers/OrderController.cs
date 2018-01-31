@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Order;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class OrderController : ApiController
     {
         [Route("Order/GetInPatPrescribeList/{hosCd}/{unitNo}/{admiYmd}/{ordYmd}")]
-        public HttpResponseResult<PatPrescribeList> GetInPatPrescribeList(string hosCd, string unitNo, string admiYmd, string ordYmd)
+        public HttpResponseResult<IEnumerable<PatPrescribeList>> GetInPatPrescribeList(string hosCd, string unitNo, string admiYmd, string ordYmd)
         {
             try
             {
@@ -26,17 +26,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<PatPrescribeList> info = SqlHelper.GetList<PatPrescribeList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatPrescribeList", param: param);
 
-                return new HttpResponseResult<PatPrescribeList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<PatPrescribeList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<PatPrescribeList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<PatPrescribeList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("Order/GetOutPatPrescribeList/{hosCd}/{unitNo}/{deptCd}/{ordYmd}/{outPatTyp}")]
-        public HttpResponseResult<PatPrescribeList> GetOutPatPrescribeList(string hosCd, string unitNo, string deptCd, string ordYmd, string outPatTyp)
+        public HttpResponseResult<IEnumerable<PatPrescribeList>> GetOutPatPrescribeList(string hosCd, string unitNo, string deptCd, string ordYmd, string outPatTyp)
         {
             try
             {
@@ -49,11 +49,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<PatPrescribeList> info = SqlHelper.GetList<PatPrescribeList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getOutPatPrescribeList", param: param);
 
-                return new HttpResponseResult<PatPrescribeList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<PatPrescribeList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<PatPrescribeList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<PatPrescribeList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }

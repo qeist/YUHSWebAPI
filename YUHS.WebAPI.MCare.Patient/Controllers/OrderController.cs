@@ -33,5 +33,28 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 return new HttpResponseResult<Prescription> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
+
+        [Route("Order/GetExamInfo/{hosCd}/{chosNo}/{unitNo}")]
+        public HttpResponseResult<ExamInfo> GetExamInfo(string hosCd, string chosNo, string unitNo)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@HosCd", value: hosCd, dbType: DbType.StringFixedLength, size: 2);
+                param.Add(name: "@ChosNo", value: chosNo, dbType: DbType.String, size: 14);
+                param.Add(name: "@UnitNo", value: unitNo, dbType: DbType.String, size: 10);
+
+                IEnumerable<ExamInfo> info = SqlHelper.GetList<ExamInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamInfoByAdmiChosNo", param: param);
+
+                return new HttpResponseResult<ExamInfo> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<ExamInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
+
+
+
     }
 }

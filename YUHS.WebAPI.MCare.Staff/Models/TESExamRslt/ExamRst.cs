@@ -1,4 +1,6 @@
-﻿namespace YUHS.WebAPI.MCare.Staff.Models.TESExamRslt
+﻿using System.Collections.Generic;
+
+namespace YUHS.WebAPI.MCare.Staff.Models.TESExamRslt
 {
     public class ExamRst
     {
@@ -12,6 +14,18 @@
         public string examinationDt { get; set; }
         public string examinationRst { get; set; }
         public string pacs { get; set; }
+        public string ShtIdxNo { get; set; }
+        public string AccNo { get; set; }
+        public string RsltKey { get; set; }
+        public string FrmClnKey { get; set; }
+        public string OrdYmd { get; set; }
+        public string OrdSlipCd { get; set; }
 
     }
+
+    public class ExamRsts
+    {
+        public IEnumerable<IList<ExamRst>> examRsts { get; set; }
+    }
+
 }

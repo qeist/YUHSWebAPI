@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Schedule;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class ScheduleController : ApiController
     {
         [Route("Schedule/GetOrderSchedule/{clnDeptCd}")]
-        public HttpResponseResult<OrderSchedule> GetOrderSchedule(string clnDeptCd)
+        public HttpResponseResult<IEnumerable<OrderSchedule>> GetOrderSchedule(string clnDeptCd)
         {
             try
             {
@@ -23,12 +23,12 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 
                 IEnumerable<OrderSchedule> info = SqlHelper.GetList<OrderSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getSettingSchedule", param: param);
 
-                return new HttpResponseResult<OrderSchedule> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<OrderSchedule>> { result = info, error = new ErrorInfo { flag = false } };
 
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<OrderSchedule> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<OrderSchedule>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }

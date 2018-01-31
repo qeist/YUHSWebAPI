@@ -6,7 +6,7 @@ using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
 using YUHS.WebAPI.Common.Utility;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Nusing;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -15,7 +15,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class NursingController : ApiController
     {
         [Route("Nursing/AddVitalInfo/{chosNo}/{actDt}/{chosGb}/{itmCd}/{msmtVal}/{exLocCd}/{rgtId}/{lstUpdId}")]
-        public HttpResponseResult<VitalInfo> AddVitalInfo(string chosNo, string actDt, string chosGb, string itmCd, string msmtVal, string exLocCd, string rgtId, string lstUpdId)
+        public HttpResponseResult<IEnumerable<VitalInfo>> AddVitalInfo(string chosNo, string actDt, string chosGb, string itmCd, string msmtVal, string exLocCd, string rgtId, string lstUpdId)
         {
             try
             {
@@ -31,16 +31,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalInfo> info = SqlHelper.GetList<VitalInfo>(targetDB: SqlHelper.GetConnectionString("EConnectionString"), storedProcedure: "USP_MR_INF_BZ_InterfaceDA_SavePatPrClnObsRecEqupByMobile", param: param);
 
-                return new HttpResponseResult<VitalInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/GetVitalList/{chosNo}/{RetrYmd}")]
-        public HttpResponseResult<VitalList> GetVitalList(string chosNo, string retrYmd)
+        public HttpResponseResult<IEnumerable<VitalList>> GetVitalList(string chosNo, string retrYmd)
         {
             try
             {
@@ -50,16 +50,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalList> info = SqlHelper.GetList<VitalList>(targetDB: SqlHelper.GetConnectionString("EConnectionString"), storedProcedure: "USP_MR_FOR_NA_EmrClnObsRecDA_SelectClnObsRecByMobile", param: param);
 
-                return new HttpResponseResult<VitalList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
-        [Route("Nursing/GetMedicationHistory/{chosNo}/{chosGb}/{retrTypGb}/{dsgRetrGb}/{divRetrGb}/{ordGbRetrGb}/{ordKindRetrGb}/{medRecRetrGb}/{ordSeq}/{strYmd}/{endYmd}/{clnDeptCd}/{regimenOrd}")]
-        public HttpResponseResult<MedicationHistory> GetMedicationHistory(string chosNo, string chosGb, string retrTypGb, string dsgRetrGb, string divRetrGb, string ordGbRetrGb, string ordKindRetrGb, string medRecRetrGb, string ordSeq, string strYmd, string endYmd, string clnDeptCd, string regimenOrd)
+        [Route("Nursing/GetMedicationHistory/{chosNo?}/{chosGb?}/{retrTypGb?}/{dsgRetrGb?}/{divRetrGb?}/{ordGbRetrGb?}/{ordKindRetrGb?}/{medRecRetrGb?}/{ordSeq?}/{strYmd?}/{endYmd?}/{clnDeptCd?}/{regimenOrd?}")]
+        public HttpResponseResult<IEnumerable<MedicationHistory>> GetMedicationHistory(string chosNo, string chosGb, string retrTypGb, string dsgRetrGb, string divRetrGb, string ordGbRetrGb, string ordKindRetrGb, string medRecRetrGb, string ordSeq, string strYmd, string endYmd, string clnDeptCd, string regimenOrd)
         {
             try
             {
@@ -80,16 +80,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<MedicationHistory> info = SqlHelper.GetList<MedicationHistory>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_get_SelectMedRecList", param: param);
 
-                return new HttpResponseResult<MedicationHistory> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<MedicationHistory>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<MedicationHistory> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<MedicationHistory>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/GetActListByDuty/{chosNo}/{retrYmd}/{dutGb}/{hosCd}/{ward}/{paraGb}/{userId}")]
-        public HttpResponseResult<ActListByDuty> GetActListByDuty(string chosNo, string retrYmd, string dutGb, string hosCd, string ward, string paraGb, string userId)
+        public HttpResponseResult<IEnumerable<ActListByDuty>> GetActListByDuty(string chosNo, string retrYmd, string dutGb, string hosCd, string ward, string paraGb, string userId)
         {
             try
             {
@@ -104,17 +104,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ActListByDuty> info = SqlHelper.GetList<ActListByDuty>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectPatWrkShtList", param: param);
 
-                return new HttpResponseResult<ActListByDuty> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ActListByDuty>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ActListByDuty> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ActListByDuty>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("Nursing/GetActList/{chosNo}/{paraGb1}/{ordSlipCd}/{strYmd}/{strHms}/{endYmd}/{endHms}/{userId}/{hosCd}/{ward}")]
-        public HttpResponseResult<ActList> GetActList(string chosNo, string paraGb1, string ordSlipCd, string strYmd, string strHms, string endYmd, string endHms, string userId, string hosCd, string ward)
+        public HttpResponseResult<IEnumerable<ActList>> GetActList(string chosNo, string paraGb1, string ordSlipCd, string strYmd, string strHms, string endYmd, string endHms, string userId, string hosCd, string ward)
         {
             try
             {
@@ -132,16 +132,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ActList> info = SqlHelper.GetList<ActList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectWrkShtList", param: param);
 
-                return new HttpResponseResult<ActList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ActList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ActList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ActList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/Execute/{execYn}/{ordSeq}/{drgInjExecSeq}/{userId}/{callLoc}")]
-        public HttpResponseResult<VitalInfo> Execute(string execYn, Int64 ordSeq, Int16 drgInjExecSeq, string userId, string callLoc)
+        public HttpResponseResult<IEnumerable<VitalInfo>> Execute(string execYn, Int64 ordSeq, Int16 drgInjExecSeq, string userId, string callLoc)
         {
             try
             {
@@ -155,16 +155,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalInfo> info = SqlHelper.GetList<VitalInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_DrgInjExecDA_UpdateWrkShtExec", param: param);
 
-                return new HttpResponseResult<VitalInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/ExecuteAfterChange/{ordSeq}/{drgInjExecSeq}/{drgInjExecStrYmd}/{drgInjExecStrHm}/{hmChgResn}/{userId}/{callLoc}")]
-        public HttpResponseResult<VitalInfo> ExecuteAfterChange(Int64 ordSeq, Int16 drgInjExecSeq, string drgInjExecStrYmd, string drgInjExecStrHm, string hmChgResn, string userId, string callLoc)
+        public HttpResponseResult<IEnumerable<VitalInfo>> ExecuteAfterChange(Int64 ordSeq, Int16 drgInjExecSeq, string drgInjExecStrYmd, string drgInjExecStrHm, string hmChgResn, string userId, string callLoc)
         {
             try
             {
@@ -180,16 +180,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalInfo> info = SqlHelper.GetList<VitalInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_DrgInjExecDA_UpdateWrkShtHmChg", param: param);
 
-                return new HttpResponseResult<VitalInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/ExecuteIvStart/{ordSeq}/{drgInjExecSeq}/{drgInjExecStrYmd}/{drgInjExecStrHm}/{userId}/{callLoc}")]
-        public HttpResponseResult<VitalInfo> ExecuteIvStart(Int64 ordSeq, Int16 drgInjExecSeq, string drgInjExecStrYmd, string drgInjExecStrHm, string userId, string callLoc)
+        public HttpResponseResult<IEnumerable<VitalInfo>> ExecuteIvStart(Int64 ordSeq, Int16 drgInjExecSeq, string drgInjExecStrYmd, string drgInjExecStrHm, string userId, string callLoc)
         {
             try
             {
@@ -204,11 +204,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalInfo> info = SqlHelper.GetList<VitalInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_DrgInjExecDA_UpdateWrkShtInjExecStr", param: param);
 
-                return new HttpResponseResult<VitalInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
@@ -236,7 +236,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
 
         [Route("Nursing/ExecuteIvEnd/{ordSeq}/{drgInjExecSeq}/{injDuseQty}/{execEndYmd}/{execEndHm}/{userId}/{callLoc}")]
-        public HttpResponseResult<VitalInfo> ExecuteIvEnd(Int64 ordSeq, Int16 drgInjExecSeq, float injDuseQty, string execEndYmd, string execEndHm, string userId, string callLoc)
+        public HttpResponseResult<IEnumerable<VitalInfo>> ExecuteIvEnd(Int64 ordSeq, Int16 drgInjExecSeq, float injDuseQty, string execEndYmd, string execEndHm, string userId, string callLoc)
         {
             try
             {
@@ -252,16 +252,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<VitalInfo> info = SqlHelper.GetList<VitalInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_DrgInjExecDA_UpdateWrkShtInjExecEnd", param: param);
 
-                return new HttpResponseResult<VitalInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<VitalInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<VitalInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Nursing/AmpleOrdCd/{ordSeq}")]
-        public HttpResponseResult<AmpleOrdCd> AmpleOrdCd(string ordSeq)
+        public HttpResponseResult<IEnumerable<AmpleOrdCd>> AmpleOrdCd(string ordSeq)
         {
             try
             {
@@ -271,11 +271,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<AmpleOrdCd> info = SqlHelper.GetList<AmpleOrdCd>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_TretMatDA_SelectAddMtlOrdExec", param: param);
                
-                return new HttpResponseResult<AmpleOrdCd> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<AmpleOrdCd>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<AmpleOrdCd> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<AmpleOrdCd>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

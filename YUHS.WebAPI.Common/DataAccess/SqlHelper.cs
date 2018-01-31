@@ -142,6 +142,35 @@ namespace YUHS.WebAPI.Common.DataAccess
             }
         }
 
+        public static Tuple<IList<T1>, IList<T2>, IList<T3>, IList<T4>> GetMultiPleList<T1, T2, T3, T4>(string targetDB, string storedProcedure, DynamicParameters param = null) where T1 : class where T2 : class where T3 : class where T4 : class
+        {
+            using (SqlConnection connection = new SqlConnection(targetDB))
+            {
+                try
+                {
+                    connection.Open();
+
+                    using (var output = connection.QueryMultiple(GetStoredProcedure(storedProcedure), param, commandType: CommandType.StoredProcedure))
+                    {
+                        IList<T1> t1 = NextResult<T1>(output);
+                        IList<T2> t2 = NextResult<T2>(output);
+                        IList<T3> t3 = NextResult<T3>(output);
+                        IList<T4> t4 = NextResult<T4>(output);
+                        return new Tuple<IList<T1>, IList<T2>, IList<T3>, IList<T4>>(t1, t2, t3, t4);
+                    }
+                }
+
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
         public static Tuple<IList<T1>, IList<T2>> GetMultiPleList<T1, T2>(string targetDB, string storedProcedure, DynamicParameters param = null) where T1 : class where T2 : class
         {
             using (SqlConnection connection = new SqlConnection(targetDB))

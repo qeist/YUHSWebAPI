@@ -15,5 +15,9 @@
         public string receiptNo { get; set; } = "";
         public string amountAmt { get; set; } = "";
         public string receiptKindNm { get; set; } = "";
+        public string wardNm { get; set; } = "";
+        public string roomNm { get; set; } = "";
+        public string nursePhone { get; set; } = "";
+
     }
 }

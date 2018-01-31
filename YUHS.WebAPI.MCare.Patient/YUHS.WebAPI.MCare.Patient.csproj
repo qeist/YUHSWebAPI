@@ -225,6 +225,7 @@
     <Compile Include="Models\Nut\AdMlOrd.cs" />
     <Compile Include="Models\Nut\BasInfo.cs" />
     <Compile Include="Models\Nut\MlOrdMList.cs" />
+    <Compile Include="Models\Order\ExamInfo.cs" />
     <Compile Include="Models\Tdrg\PatientCounseling.cs" />
     <Compile Include="Models\Tdrg\PatientEducation.cs" />
     <Compile Include="Models\VisitInfoHistory\BillDetail.cs" />

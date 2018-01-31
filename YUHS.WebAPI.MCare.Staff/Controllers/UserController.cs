@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.User;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class UserController : ApiController
     {
         [Route("User/GetLoginInfo/{hosCd}/{userId}/{pwd}")]
-        public HttpResponseResult<LoginInfo> GetLoginInfo(string hosCd, string userId, string pwd)
+        public HttpResponseResult<IEnumerable<LoginInfo>> GetLoginInfo(string hosCd, string userId, string pwd)
         {
             try
             {
@@ -25,11 +25,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<LoginInfo> info = SqlHelper.GetList<LoginInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getLoginInfo", param: param);
 
-                return new HttpResponseResult<LoginInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<LoginInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<LoginInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<LoginInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }

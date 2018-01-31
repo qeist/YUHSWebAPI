@@ -1016,7 +1016,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
 
             //OrdDs = SelectRcptContByChosNo_MOB3(unitNo, hosCd, chosNo);
-            if (OrdDs.Tables.Contains("ERROR_MSG"))
+            if (OrdDs == null || OrdDs.Tables.Contains("ERROR_MSG"))
             {
                 //모바일 UnitNo조회시  무조건 원복
                 FnPlnExecYmdUseYn(hosCd, unitNo, "C", "");
@@ -1483,6 +1483,10 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 AcptResult.Rows[0]["ResultCd"] = "Y";
                 AcptResult.Rows[0]["HosoOrdNo"] = dt.Rows[0]["HosoOrdNo"].ToString();
                 AcptResult.Rows[0]["ErrorMsg"] = "";
+
+                //완료로그
+                _FEEFacade.LogWrite(chosNo, unitNo, "MOAcptEnd", clnYmd, clnYmd, "", "", "MOBILE", "O"
+                    , dt.Rows[0]["BillNo"].ToString(), dt.Rows[0]["HosoOrdNo"].ToString(), strLogDesc2);
             }
             else
             {

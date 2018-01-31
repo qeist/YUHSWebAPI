@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 
-namespace YUHS.WebAPI.MCare.Patient.Models.Common
+namespace YUHS.WebAPI.MCare.Staff.Models.Common
 {
     public class HttpResponseResult<T>
     {
-        public IEnumerable<T> result { get; set; }
+        //public IEnumerable<T> result { get; set; }
+        public T result { get; set; }
         public ErrorInfo error { get; set; }
     }
 

@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.InSearch;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class InSearchController : ApiController
     {
         [Route("InSearch/GetInPatListPerDoctor/{hosCd}/{drId}")]
-        public HttpResponseResult<InPatList> GetInPatListPerDoctor(string hosCd, string drId)
+        public HttpResponseResult<IEnumerable<InPatList>> GetInPatListPerDoctor(string hosCd, string drId)
         {
             try
             {
@@ -24,17 +24,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatList> info = SqlHelper.GetList<InPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatListPerDoctor", param: param);
 
-                return new HttpResponseResult<InPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("InSearch/GetInPatListPerDept/{hosCd}/{deptCd}")]
-        public HttpResponseResult<InPatList> GetInPatListPerDept(string hosCd, string deptCd)
+        public HttpResponseResult<IEnumerable<InPatList>> GetInPatListPerDept(string hosCd, string deptCd)
         {
             try
             {
@@ -44,17 +44,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatList> info = SqlHelper.GetList<InPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatListPerDept", param: param);
 
-                return new HttpResponseResult<InPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("InSearch/GetInPatListPerWard/{hosCd}/{ward}")]
-        public HttpResponseResult<InPatList> GetInPatListPerWard(string hosCd, string ward)
+        public HttpResponseResult<IEnumerable<InPatList>> GetInPatListPerWard(string hosCd, string ward)
         {
             try
             {
@@ -64,17 +64,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatList> info = SqlHelper.GetList<InPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatListPerWard", param: param);
 
-                return new HttpResponseResult<InPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("InSearch/GetInPatListPerDD/{hosCd}/{deptCd}/{drId}")]
-        public HttpResponseResult<InPatList> GetInPatListPerDD(string hosCd, string deptCd, string drId)
+        public HttpResponseResult<IEnumerable<InPatList>> GetInPatListPerDD(string hosCd, string deptCd, string drId)
         {
             try
             {
@@ -85,17 +85,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatList> info = SqlHelper.GetList<InPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatListPerDD", param: param);
 
-                return new HttpResponseResult<InPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("InSearch/GetInPatListPerWD/{hosCd}/{ward}/{drId}")]
-        public HttpResponseResult<InPatList> GetInPatListPerWD(string hosCd, string ward, string drId)
+        public HttpResponseResult<IEnumerable<InPatList>> GetInPatListPerWD(string hosCd, string ward, string drId)
         {
             try
             {
@@ -106,17 +106,17 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatList> info = SqlHelper.GetList<InPatList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatListPerWD", param: param);
 
-                return new HttpResponseResult<InPatList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }
 
         [Route("InSearch/GetInPatInfo/{hosCd}/{unitNo}/{treatTyp}")]
-        public HttpResponseResult<InPatInfo> GetInPatInfo(string hosCd, string unitNo, string treatTyp)
+        public HttpResponseResult<IEnumerable<InPatInfo>> GetInPatInfo(string hosCd, string unitNo, string treatTyp)
         {
             try
             {
@@ -127,16 +127,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<InPatInfo> info = SqlHelper.GetList<InPatInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getInPatInfo", param: param);
 
-                return new HttpResponseResult<InPatInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<InPatInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<InPatInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<InPatInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("InSearch/GetPatientInfo/{hosCd}/{unitNo}")]
-        public HttpResponseResult<PatientInfo> GetPatientInfo(string hosCd, string unitNo)
+        public HttpResponseResult<IEnumerable<PatientInfo>> GetPatientInfo(string hosCd, string unitNo)
         {
             try
             {
@@ -146,11 +146,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<PatientInfo> info = SqlHelper.GetList<PatientInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getPatientInfo", param: param);
 
-                return new HttpResponseResult<PatientInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<PatientInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<PatientInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<PatientInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
 
         }

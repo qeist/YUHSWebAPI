@@ -35,35 +35,36 @@ namespace YUHS.WebAPI.MCare.Patient.Library
         private string TotalPayAmtBilYn = "N";          // 전액수납여부 체크 
         private DataTable OCS_CARD_LISTDT;
         private bool isExsitPermCrd = false;
+        private string strLogDesc2;
 
         public DataTable GetPaymentList(string hosCd, string unitNo, string chosGb, string chosNo, string deptCd, string MaintSubCd, string clnYmd, string acptYmd, string proxyYn)
         {
             // 전역변수 설정 
-			strHosCd = hosCd; 
-			strUnitNo = unitNo; 
-			//strChosNo = pChosNo;
+            strHosCd = hosCd;
+            strUnitNo = unitNo;
+            //strChosNo = pChosNo;
             strKioskID = "MOBILE";
-			
-			DataSet admiAcptList = null; 
-			DataTable admiAcptListDt = null; 
 
-			ErrorMsg = string.Empty; 
+            DataSet admiAcptList = null;
+            DataTable admiAcptListDt = null;
 
-			Hashtable ht = new Hashtable();
+            ErrorMsg = string.Empty;
 
-			ht.Add("HosCd", strHosCd );
-			ht.Add("UnitNo", strUnitNo.Trim());
-			//ht.Add("ChosNo", strChosNo.Trim());
-			ht.Add("ChosNo", string.Empty);
-			ht.Add("ChosGb" , "I");		// 입원 
+            Hashtable ht = new Hashtable();
 
-             
+            ht.Add("HosCd", strHosCd);
+            ht.Add("UnitNo", strUnitNo.Trim());
+            //ht.Add("ChosNo", strChosNo.Trim());
+            ht.Add("ChosNo", string.Empty);
+            ht.Add("ChosGb", "I");      // 입원 
+
+
             DataTable Ord = MakeAdmiChosList();
             DataRow rOrd = Ord.NewRow();
 
-			try
-			{	
-				ErrorMsg = "ERR_FIND_PATINFO";
+            try
+            {
+                ErrorMsg = "ERR_FIND_PATINFO";
 
                 #region ●1 - 환자의 입원 정보를 조회합니다 
 
@@ -72,161 +73,161 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
                 admiAcptList = _FEEFacade.SelectAdmiDep_AdmiAcpNtx(ht);
 
-				// 리턴받은 테이블 구조 
-				//		AdmiPat		:	환자신상-접수 정보
-				//		AdmiAcuracc	:	수납금액정보 
-				//					PatChagTotAmt	System.Int32
-				//					PatChagCalcYmd
-				//					AcptAmt		System.Int32
-				//					RduAmt		System.Int32
-				//					DscAcptYn	
-				//					FractionAmt	System.Int32
-				//
-				//		OpCommYn	:	수술전송여부
-				//					OpCommYn	
+                // 리턴받은 테이블 구조 
+                //		AdmiPat		:	환자신상-접수 정보
+                //		AdmiAcuracc	:	수납금액정보 
+                //					PatChagTotAmt	System.Int32
+                //					PatChagCalcYmd
+                //					AcptAmt		System.Int32
+                //					RduAmt		System.Int32
+                //					DscAcptYn	
+                //					FractionAmt	System.Int32
+                //
+                //		OpCommYn	:	수술전송여부
+                //					OpCommYn	
 
-				#endregion 
-                
-				// 가지고 온 결과에 대한 Filtering
-				if ( admiAcptList.Tables.Count == 0 ||
-					! admiAcptList.Tables.Contains("AdmiPat") || 
-					admiAcptList.Tables["AdmiPat"].Rows.Count == 0 
-					)
-				{
-					// 입력받은 등록번호로 재원 중인 내원건이 없는 경우
-					//return GetErrorDs( "", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO") , "B", "환자정보가 없습니다" , strKioskID );
+                #endregion
+
+                // 가지고 온 결과에 대한 Filtering
+                if (admiAcptList.Tables.Count == 0 ||
+                    !admiAcptList.Tables.Contains("AdmiPat") ||
+                    admiAcptList.Tables["AdmiPat"].Rows.Count == 0
+                    )
+                {
+                    // 입력받은 등록번호로 재원 중인 내원건이 없는 경우
+                    //return GetErrorDs( "", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO") , "B", "환자정보가 없습니다" , strKioskID );
                     rOrd["ErrorMsg"] = GetErrorDs("", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO"), "B", "환자정보가 없습니다", strKioskID).Rows[0]["ERROR_MSG"];
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
                     return Ord;
-                    
-				}
 
-				// #1 . admiAcptList		First Table "AdmiPat"	
-				admiAcptListDt = admiAcptList.Tables["AdmiPat"];	
+                }
 
-				// 전역변수 ChosNo 를 선언한다. 
-				strChosNo =  admiAcptList.Tables["AdmiPat"].Rows[0]["ChosNo"].ToString();
+                // #1 . admiAcptList		First Table "AdmiPat"	
+                admiAcptListDt = admiAcptList.Tables["AdmiPat"];
 
-				DataTable AdmiAcuracc = admiAcptList.Tables["AdmiAcuracc"] ; 
+                // 전역변수 ChosNo 를 선언한다. 
+                strChosNo = admiAcptList.Tables["AdmiPat"].Rows[0]["ChosNo"].ToString();
 
-				// [2007.01.04] 
-				// 입원무인수납 불가 체크 
-				DataTable psblDt = ChkAdmiAcptPsbl( ref admiAcptListDt, strChosNo );
+                DataTable AdmiAcuracc = admiAcptList.Tables["AdmiAcuracc"];
+
+                // [2007.01.04] 
+                // 입원무인수납 불가 체크 
+                DataTable psblDt = ChkAdmiAcptPsbl(ref admiAcptListDt, strChosNo);
 
                 if (psblDt != null)
-				{
+                {
                     rOrd["ErrorMsg"] = psblDt.Rows[0]["ERROR_MSG"];
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
-                     
+
                     return Ord;
                     //return psblDt;
-				}
+                }
 
 
 
-				// [2006.06.07] 
-				// 입원시작일자 부터 오늘까지를 컬럼으로 넣습니다. 
+                // [2006.06.07] 
+                // 입원시작일자 부터 오늘까지를 컬럼으로 넣습니다. 
 
 
 
-				#region ●2 - 환자 입원 정보 처리 
+                #region ●2 - 환자 입원 정보 처리 
 
-				// 테이블 추가 정보 기록 
-				admiAcptListDt.Columns.Add("DscAcptYn", typeof(string)); 
-				admiAcptListDt.Rows[0]["DscAcptYn"] = "N";		// 초기값 : 중간수납
+                // 테이블 추가 정보 기록 
+                admiAcptListDt.Columns.Add("DscAcptYn", typeof(string));
+                admiAcptListDt.Rows[0]["DscAcptYn"] = "N";      // 초기값 : 중간수납
 
-				admiAcptListDt.Columns.Add("AmbCount", typeof(string));		// 외래 예약건 존재 시 그 예약건의 갯수 
-				admiAcptListDt.Rows[0]["AmbCount"] = 0;			// 예약건 없다
+                admiAcptListDt.Columns.Add("AmbCount", typeof(string));     // 외래 예약건 존재 시 그 예약건의 갯수 
+                admiAcptListDt.Rows[0]["AmbCount"] = 0;         // 예약건 없다
 
-				// 내셔야할 금액
-				// AdmiAcuracc 테이블에 기록한다. 
-				if (! AdmiAcuracc.Columns.Contains("TotalPayAmt") )
-				{
-					AdmiAcuracc.Columns.Add("TotalPayAmt", typeof(double));
-					AdmiAcuracc.Rows[0]["TotalPayAmt"] = 0;	
-				}
+                // 내셔야할 금액
+                // AdmiAcuracc 테이블에 기록한다. 
+                if (!AdmiAcuracc.Columns.Contains("TotalPayAmt"))
+                {
+                    AdmiAcuracc.Columns.Add("TotalPayAmt", typeof(double));
+                    AdmiAcuracc.Rows[0]["TotalPayAmt"] = 0;
+                }
 
-				// 퇴원수납 시 단수차액 : FractionAmt 
-				// AdmiAcuracc 테이블에 기록한다. 
-				if ( ! AdmiAcuracc.Columns.Contains("DscFractionAmt") )
-				{
-					AdmiAcuracc.Columns.Add("DscFractionAmt", typeof(double));
-					AdmiAcuracc.Rows[0]["DscFractionAmt"] = 0;	
-				}
+                // 퇴원수납 시 단수차액 : FractionAmt 
+                // AdmiAcuracc 테이블에 기록한다. 
+                if (!AdmiAcuracc.Columns.Contains("DscFractionAmt"))
+                {
+                    AdmiAcuracc.Columns.Add("DscFractionAmt", typeof(double));
+                    AdmiAcuracc.Rows[0]["DscFractionAmt"] = 0;
+                }
 
-				// 퇴원수납 시 외래 예약건에 대한 Total 내셔야 할 금액 
-				// AdmiAcuracc 테이블에 기록한다. 
-				if ( ! AdmiAcuracc.Columns.Contains("AmbRsvTotalAmt") )
-				{
-					AdmiAcuracc.Columns.Add("AmbRsvTotalAmt", typeof( double)); 
-					AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"] = 0; 
-				}
+                // 퇴원수납 시 외래 예약건에 대한 Total 내셔야 할 금액 
+                // AdmiAcuracc 테이블에 기록한다. 
+                if (!AdmiAcuracc.Columns.Contains("AmbRsvTotalAmt"))
+                {
+                    AdmiAcuracc.Columns.Add("AmbRsvTotalAmt", typeof(double));
+                    AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"] = 0;
+                }
 
-				// 외래 + 입원에 대한 총수납액을 구합니다.
-				// AdmiAcuracc 테이블에 기록한다. 
-				if ( ! AdmiAcuracc.Columns.Contains("AmbAdmiSumAmt") )
-				{
-					AdmiAcuracc.Columns.Add("AmbAdmiSumAmt", typeof( double)); 
-					AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] = 0; 
-				}
-				
-
+                // 외래 + 입원에 대한 총수납액을 구합니다.
+                // AdmiAcuracc 테이블에 기록한다. 
+                if (!AdmiAcuracc.Columns.Contains("AmbAdmiSumAmt"))
+                {
+                    AdmiAcuracc.Columns.Add("AmbAdmiSumAmt", typeof(double));
+                    AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] = 0;
+                }
 
 
 
-				// 재원기간을 넣는다 
-				// admiAcptListDt 테이블에 기록한다. 
-				if ( ! admiAcptListDt.Columns.Contains("ToDay") )
-				{
-					admiAcptListDt.Columns.Add("ToDay", typeof( string )); 
-					admiAcptListDt.Rows[0]["ToDay"] = DateTime.Now.ToString("yyyyMMdd");
-				}
-
-				double iPatChagTotAmt = 0;		// 환자부담총액
-				double iRduAmt = 0;			// 감액/후납
-				double ipAcptAmt =0;			// 기수납금액
-				double iTotalPayAmt =0;		// 환자의 내셔야 할 금액
-
-				
-
-				iPatChagTotAmt = double.Parse(AdmiAcuracc.Rows[0]["PatChagTotAmt"].ToString());
-				// iRduAmt = double.Parse(AdmiAcuracc.Rows[0]["AcptAmt"].ToString());
-				// ipAcptAmt = double.Parse(AdmiAcuracc.Rows[0]["RduAmt"].ToString());
-
-				ipAcptAmt = double.Parse(AdmiAcuracc.Rows[0]["AcptAmt"].ToString());
-				iRduAmt = double.Parse(AdmiAcuracc.Rows[0]["RduAmt"].ToString());
-
-				#region ●2.1 - 환자가 내셔야 할 금액을 계산합니다. 
-
-				// 단수차액 계산을 하고 
-				iTotalPayAmt = DoWonFloor(DoWonFloor(iPatChagTotAmt - iRduAmt) - ipAcptAmt );
-
-				AdmiAcuracc.Rows[0]["TotalPayAmt"] = iTotalPayAmt; 
-				
-				#endregion 
-		
-
-				// 퇴원계산일자가 DateTime 이므로 데이터 전환을 위한 값을 넣습니다. 
-				admiAcptList.Tables["AdmiPat"].Columns.Add("DscCalcYmdDT", typeof(string)); 
-				admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"] = ""; 
-
-				// 퇴원 수납여부를 기록합니다. DscAcptYn
-				if(admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString().Length > 0 &&
-					admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString().Substring(0,4) != "1900")
-				{
-					admiAcptListDt.Rows[0]["DscAcptYn"] = "Y";	// 퇴원수납!!
-					admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"] = Convert.ToDateTime( admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"]).ToString("yyyyMMdd");
-
-					admiAcptListDt.Rows[0]["ToDay"] = admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"] ; 
 
 
-					// 외래 수납내역을 바인딩합니다. 
-					ErrorMsg = "ERR_FIND_AMBACPT"; 
+                // 재원기간을 넣는다 
+                // admiAcptListDt 테이블에 기록한다. 
+                if (!admiAcptListDt.Columns.Contains("ToDay"))
+                {
+                    admiAcptListDt.Columns.Add("ToDay", typeof(string));
+                    admiAcptListDt.Rows[0]["ToDay"] = DateTime.Now.ToString("yyyyMMdd");
+                }
 
-					#region ●2.2 - 외래 예약 내역을 조회 합니다. 
-					/*
+                double iPatChagTotAmt = 0;      // 환자부담총액
+                double iRduAmt = 0;         // 감액/후납
+                double ipAcptAmt = 0;           // 기수납금액
+                double iTotalPayAmt = 0;        // 환자의 내셔야 할 금액
+
+
+
+                iPatChagTotAmt = double.Parse(AdmiAcuracc.Rows[0]["PatChagTotAmt"].ToString());
+                // iRduAmt = double.Parse(AdmiAcuracc.Rows[0]["AcptAmt"].ToString());
+                // ipAcptAmt = double.Parse(AdmiAcuracc.Rows[0]["RduAmt"].ToString());
+
+                ipAcptAmt = double.Parse(AdmiAcuracc.Rows[0]["AcptAmt"].ToString());
+                iRduAmt = double.Parse(AdmiAcuracc.Rows[0]["RduAmt"].ToString());
+
+                #region ●2.1 - 환자가 내셔야 할 금액을 계산합니다. 
+
+                // 단수차액 계산을 하고 
+                iTotalPayAmt = DoWonFloor(DoWonFloor(iPatChagTotAmt - iRduAmt) - ipAcptAmt);
+
+                AdmiAcuracc.Rows[0]["TotalPayAmt"] = iTotalPayAmt;
+
+                #endregion
+
+
+                // 퇴원계산일자가 DateTime 이므로 데이터 전환을 위한 값을 넣습니다. 
+                admiAcptList.Tables["AdmiPat"].Columns.Add("DscCalcYmdDT", typeof(string));
+                admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"] = "";
+
+                // 퇴원 수납여부를 기록합니다. DscAcptYn
+                if (admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString().Length > 0 &&
+                    admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString().Substring(0, 4) != "1900")
+                {
+                    admiAcptListDt.Rows[0]["DscAcptYn"] = "Y";  // 퇴원수납!!
+                    admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"] = Convert.ToDateTime(admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"]).ToString("yyyyMMdd");
+
+                    admiAcptListDt.Rows[0]["ToDay"] = admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmdDT"];
+
+
+                    // 외래 수납내역을 바인딩합니다. 
+                    ErrorMsg = "ERR_FIND_AMBACPT";
+
+                    #region ●2.2 - 외래 예약 내역을 조회 합니다. 
+                    /*
 					SetAmbItem( ref admiAcptList , strUnitNo, strHosCd, pKioskID); 
 
 					// 외래 예약건 조회 후... 예약건이 존재시에는 KIOSK 화면에 알릴 수 있도록 합니다. 
@@ -237,7 +238,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 						admiAcptListDt.Rows[0]["AmbCount"] = admiAcptList.Tables["Ord"].Rows.Count; 
 					}
                     */
-					#endregion 
+                    #endregion
                     /*
 					// 조회를 한 외래 예약건의 내셔야 할 금액의 Sum을 구합니다. 
 					// 외래의 경우, 여러 개의 내원 건이 있으므로, Total Sum을 구합니다. 
@@ -266,14 +267,14 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 						AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"] = dAmbRsvAmt; 
 					}
                     */
-				}
-			
-	
-				#region ●3 퇴원수납일 경우.. 단수 차액을 발생시킨다. DscFractionAmt
+                }
 
-				this.ErrorMsg = "ERR_DoFractionAmt"; 
 
-				double iDscFractionAmt = 0;
+                #region ●3 퇴원수납일 경우.. 단수 차액을 발생시킨다. DscFractionAmt
+
+                this.ErrorMsg = "ERR_DoFractionAmt";
+
+                double iDscFractionAmt = 0;
 
                 string DisCalcYn = "";
                 if (admiAcptListDt.Rows[0]["DscAcptYn"].ToString() == "Y")
@@ -285,56 +286,56 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                     DisCalcYn = "N";
                 }
 
-				if ( admiAcptListDt.Rows[0]["DscAcptYn"].ToString() == "Y" )
-				{
-					// 단수차액 
-					//	본인부담총액 - 기수납액 - 감액 
-					//		- ( 절삭 본인부담총액 - 기수납액 - 감액 ) 
-					//		- 현재 수납 테이블에서 들어간 단수차액의 합계	 
-					//					(	USP_HP_FEE_IP_AdmiAcptDA_selectFractionAmt 에서 계산한 단수차액  )
+                if (admiAcptListDt.Rows[0]["DscAcptYn"].ToString() == "Y")
+                {
+                    // 단수차액 
+                    //	본인부담총액 - 기수납액 - 감액 
+                    //		- ( 절삭 본인부담총액 - 기수납액 - 감액 ) 
+                    //		- 현재 수납 테이블에서 들어간 단수차액의 합계	 
+                    //					(	USP_HP_FEE_IP_AdmiAcptDA_selectFractionAmt 에서 계산한 단수차액  )
 
-					iDscFractionAmt = 
-						(iPatChagTotAmt-ipAcptAmt-iRduAmt 
-						- DoWonFloor(iPatChagTotAmt - ipAcptAmt - iRduAmt )
-						) -	double.Parse(AdmiAcuracc.Rows[0]["FractionAmt"].ToString());
-				}
-			
-				AdmiAcuracc.Rows[0]["DscFractionAmt"] = iDscFractionAmt; 
+                    iDscFractionAmt =
+                        (iPatChagTotAmt - ipAcptAmt - iRduAmt
+                        - DoWonFloor(iPatChagTotAmt - ipAcptAmt - iRduAmt)
+                        ) - double.Parse(AdmiAcuracc.Rows[0]["FractionAmt"].ToString());
+                }
 
-				#endregion 
-				
-				// ★(???) 이미 퇴원수납을 한 대상이면, 메시지 처리를 해야 하는가? 
-				if ( admiAcptList.Tables["AdmiAcuracc"].Rows[0]["DscAcptYn"].ToString() == "Y" )
-				{
-					//return GetErrorDs( strChosNo, "DSC_ACPTTED", "이미 퇴원수납 된 환자입니다." , "B", "퇴원 수납이 되어서 입금불가." , strKioskID ); 
+                AdmiAcuracc.Rows[0]["DscFractionAmt"] = iDscFractionAmt;
+
+                #endregion
+
+                // ★(???) 이미 퇴원수납을 한 대상이면, 메시지 처리를 해야 하는가? 
+                if (admiAcptList.Tables["AdmiAcuracc"].Rows[0]["DscAcptYn"].ToString() == "Y")
+                {
+                    //return GetErrorDs( strChosNo, "DSC_ACPTTED", "이미 퇴원수납 된 환자입니다." , "B", "퇴원 수납이 되어서 입금불가." , strKioskID ); 
                     rOrd["ErrorMsg"] = GetErrorDs("", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO"), "B", "환자정보가 없습니다", strKioskID).Rows[0]["ERROR_MSG"];
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
                     return Ord;
-				}
-                
-				#endregion 
+                }
 
-				#region Old Source
-//				if ( iTotalPayAmt < 1000 )
-//				{
-//					return GetErrorDs( strChosNo, "CNNT_ADMITAMT", "내셔야 할 금액이 "+iTotalPayAmt+" 입니다. 1000원미만의 금액은 창구를 사용하셔요." , "B", "1000원 미만금액("+iTotalPayAmt+") 입금불가" , strKioskID ); 
-//				}
-				#endregion 
+                #endregion
 
-				#region New Source
-				/* 2010.07.21 장근주 신용카드 1000원미만승인불가에서 1원미만승인불가로 변경*/
-				if ( iTotalPayAmt < 1 )
-				{
-					//return GetErrorDs( strChosNo, "CNNT_ADMITAMT", "내셔야 할 금액이 "+iTotalPayAmt+" 입니다. 1원미만의 금액은 창구를 사용하셔요." , "B", "1000원 미만금액("+iTotalPayAmt+") 입금불가" , strKioskID ); 
+                #region Old Source
+                //				if ( iTotalPayAmt < 1000 )
+                //				{
+                //					return GetErrorDs( strChosNo, "CNNT_ADMITAMT", "내셔야 할 금액이 "+iTotalPayAmt+" 입니다. 1000원미만의 금액은 창구를 사용하셔요." , "B", "1000원 미만금액("+iTotalPayAmt+") 입금불가" , strKioskID ); 
+                //				}
+                #endregion
+
+                #region New Source
+                /* 2010.07.21 장근주 신용카드 1000원미만승인불가에서 1원미만승인불가로 변경*/
+                if (iTotalPayAmt < 1)
+                {
+                    //return GetErrorDs( strChosNo, "CNNT_ADMITAMT", "내셔야 할 금액이 "+iTotalPayAmt+" 입니다. 1원미만의 금액은 창구를 사용하셔요." , "B", "1000원 미만금액("+iTotalPayAmt+") 입금불가" , strKioskID ); 
                     rOrd["ErrorMsg"] = GetErrorDs("", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO"), "B", "환자정보가 없습니다", strKioskID).Rows[0]["ERROR_MSG"];
                     Ord.Rows.Add(rOrd);
                     Ord.AcceptChanges();
                     return Ord;
-				}
-				#endregion 
+                }
+                #endregion
 
-                if (admiAcptList.Tables.Contains("AdmiPat") && admiAcptList.Tables["AdmiPat"].Rows.Count>0)
+                if (admiAcptList.Tables.Contains("AdmiPat") && admiAcptList.Tables["AdmiPat"].Rows.Count > 0)
                 {
                     //입원은 무조건 0번로우만..
                     rOrd["HosCd"] = hosCd;
@@ -344,7 +345,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                     rOrd["AdmiYmd"] = admiAcptList.Tables["AdmiPat"].Rows[0]["OrdStrYmd"].ToString();
                     rOrd["ChosNo"] = admiAcptList.Tables["AdmiPat"].Rows[0]["ChosNo"].ToString();
                     rOrd["CalcStrYmd"] = admiAcptList.Tables["AdmiPat"].Rows[0]["OrdStrYmd"].ToString();
-                    if (admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"] != null &&admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString() !="" )
+                    if (admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"] != null && admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"].ToString() != "")
                     {
                         rOrd["CalcEndYmd"] = Convert.ToDateTime(admiAcptList.Tables["AdmiPat"].Rows[0]["DscCalcYmd"]).ToString("yyyyMMdd");
                     }
@@ -372,29 +373,29 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
 
 
-				// 입원 + 외래예약금의 Sum을 구합니다. 
-				// AmbAdmiSumAmt
-				//	AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] 
+                // 입원 + 외래예약금의 Sum을 구합니다. 
+                // AmbAdmiSumAmt
+                //	AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] 
 
-				//	AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"]
-				//	AdmiAcuracc.Rows[0]["TotalPayAmt"]	[단수차액???]
-				//AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] = Convert.ToInt32( AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"] ) 
-				//	+ Convert.ToInt32( AdmiAcuracc.Rows[0]["TotalPayAmt"] ) ; 
-                
+                //	AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"]
+                //	AdmiAcuracc.Rows[0]["TotalPayAmt"]	[단수차액???]
+                //AdmiAcuracc.Rows[0]["AmbAdmiSumAmt"] = Convert.ToInt32( AdmiAcuracc.Rows[0]["AmbRsvTotalAmt"] ) 
+                //	+ Convert.ToInt32( AdmiAcuracc.Rows[0]["TotalPayAmt"] ) ; 
 
-			}
-			catch(Exception ex)
-			{
-				//return GetErrorDs( strChosNo, ErrorMsg, makeMsg(ErrorMsg) , "B", ex.Message , strKioskID ); 
+
+            }
+            catch (Exception ex)
+            {
+                //return GetErrorDs( strChosNo, ErrorMsg, makeMsg(ErrorMsg) , "B", ex.Message , strKioskID ); 
                 rOrd["ErrorMsg"] = GetErrorDs("", "NOT_FOUND_PATINFO", makeMsg("NOT_FOUND_PATINFO"), "B", "환자정보가 없습니다", strKioskID).Rows[0]["ERROR_MSG"];
                 Ord.Rows.Add(rOrd);
                 Ord.AcceptChanges();
                 return Ord;
-			}
-            
+            }
 
 
-            return Ord; 
+
+            return Ord;
 
         }
 
@@ -1036,6 +1037,11 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             string strVldTh = vldThru;
             string strInstMcnt = instMcnt;
             string SelectedAmbChosNo = null; //외래 안함.
+
+            strLogDesc2 = hosCd + "|" + unitNo + "|" + chosGb + "|" + chosNo + "|" + clnYmd + "|" + crdIssLoc + "|" + crdNo
+                + "|" + crdTypGb + "|" + vldThru + "|" + instMcnt + "|" + permAmt + "|" + permYmd + "|" + permHms
+                + "|" + permNo + "|" + slpNo + "|" + mbstNo + "|" + inpurcCoNm + "|" + crdData + "|" + vanSeqNo
+                + "|" + crdPermMeth + "|" + iCPermMeth + "|" + pOSNo + "|" + vanGb + "|" + inpurcCd;
 
             //카드승인정보pht로 바꿔 넘긴다.
             Hashtable crdHt = new Hashtable();
@@ -2026,13 +2032,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                                 , crdHt
                                 );
 
-                            //모바일
-                            if (rnt)
-                            {
-                                rtnResult.Rows[0]["ResultCd"] = "Y";
-                                rtnResult.Rows[0]["ErrorMsg"] = "";
-                            }
-                            else
+                            if (!rnt)
                             {
                                 rtnResult.Rows[0]["ResultCd"] = "N";
                                 rtnResult.Rows[0]["ErrorMsg"] = "수납 처리 실패 하였습니다.";
@@ -2085,7 +2085,15 @@ namespace YUHS.WebAPI.MCare.Patient.Library
 
                 sBilNo = _FEEFacade.AdmiAcptCmpIt_AdmiAcptTx(pht, AcptDTO);
 
+                //정상수납 결과
+                rtnResult.Rows[0]["ResultCd"] = "Y";
+                rtnResult.Rows[0]["ErrorMsg"] = "";
+                rtnResult.Rows[0]["BillNo"] = sBilNo;
 
+                //완료로그 
+                _FEEFacade.LogWrite(pht["ChosNo"].ToString().Trim(), pht["UnitNo"].ToString().Trim(),
+                    "MOAcptEnd", "", "", "", "", "MOBILE", "I"
+                    , sBilNo, "", strLogDesc2);
 
             }
             catch (Exception ex)
@@ -2426,7 +2434,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             crdRow["InstMcnt"] = crdHt["InstMcnt"].ToString().Trim();		// 할부기간 
             crdRow["PermAmt"] = int.Parse(crdHt["PermAmt"].ToString().Trim());	// 승인금액 
             crdRow["InsMeth"] = "2"; //
-            crdRow["CrdData"] = crdHt["CrdData"] == null ? "": crdHt["CrdData"].ToString().Trim();
+            crdRow["CrdData"] = crdHt["CrdData"] == null ? "" : crdHt["CrdData"].ToString().Trim();
             crdRow["CnBfCrdIFNo"] = System.DBNull.Value;
             crdRow["PermStusGb"] = "P";
             crdRow["CnYn"] = "N";
@@ -2439,7 +2447,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
             crdRow["VanSeqNo"] = crdHt["VanSeqNo"].ToString().Trim();
             crdRow["CrdPermMeth"] = crdHt["CrdPermMeth"].ToString().Trim();
             crdRow["ICPermMeth"] = crdHt["ICPermMeth"].ToString().Trim();
-            crdRow["POSNo"] = crdHt["POSNo"] == null ? "" :  crdHt["POSNo"].ToString().Trim();
+            crdRow["POSNo"] = crdHt["POSNo"] == null ? "" : crdHt["POSNo"].ToString().Trim();
 
             if (!File.Exists("AccPerm"))
             {
@@ -2453,7 +2461,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 crdRow["VanGb"] = crdHt["VanGb"].ToString().Trim(); 		// Van Gb 구분 
                 crdRow["SlpNo"] = crdHt["SlpNo"].ToString().Trim(); 		// 매출번호 
                 crdRow["MbstNo"] = crdHt["MbstNo"].ToString().Trim();
-                crdRow["InpurcCoNm"] = crdHt["InpurcCoNm"] ==null ? "" : crdHt["InpurcCoNm"].ToString().Trim();
+                crdRow["InpurcCoNm"] = crdHt["InpurcCoNm"] == null ? "" : crdHt["InpurcCoNm"].ToString().Trim();
 
                 crdRow["CrdTypGb"] = crdHt["CrdTypGb"].ToString().Trim();
             }
@@ -2518,7 +2526,7 @@ namespace YUHS.WebAPI.MCare.Patient.Library
                 // 입원영수증 테이블을 저장합니다. 									
                 //	HP_KIOSKBillInfo
                 //HIS.Facade.HP.FEE.FEEFacade _oFacade = new HIS.Facade.HP.FEE.FEEFacade();
-                iResult =_FEEFacade.INSERT_HP_KIOSKBillInfo(
+                iResult = _FEEFacade.INSERT_HP_KIOSKBillInfo(
                     "MOBILE"
                     , RetrSeq
                     , billNo1

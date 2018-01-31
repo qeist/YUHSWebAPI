@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Sergery;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class SergeryController : ApiController
     {
         [Route("Sergery/GetFindOpPatLst/{hospitalCd}/{viewFmDt}/{viewToDt}/{operatingCntr}/{departmentCd}/{operatingRoom}/{operatingDrNm}/{operatingTyp1}/{operatingTyp2}/{operatingTyp3}")]
-        public HttpResponseResult<OpPat> GetFindOpPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
+        public HttpResponseResult<IEnumerable<OpPat>> GetFindOpPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
         {
 
             try
@@ -33,16 +33,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<OpPat> info = SqlHelper.GetList<OpPat>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectPatgetFindOpPatLst", param: param);
 
-                return new HttpResponseResult<OpPat> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<OpPat>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<OpPat> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<OpPat>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Sergery/GetFindAnsPatLst/{hospitalCd}/{viewFmDt}/{viewToDt}/{operatingCntr}/{departmentCd}/{operatingRoom}/{operatingDrNm}/{operatingTyp1}/{operatingTyp2}/{operatingTyp3}")]
-        public HttpResponseResult<AnsPat> GetFindAnsPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
+        public HttpResponseResult<IEnumerable<AnsPat>> GetFindAnsPatLst(string hospitalCd, string viewFmDt, string viewToDt, string operatingCntr, string departmentCd, string operatingRoom, string operatingDrNm, string operatingTyp1, string operatingTyp2, string operatingTyp3)
         {
             try
             {
@@ -60,16 +60,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<AnsPat> info = SqlHelper.GetList<AnsPat>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectgetFindAnsPatLst", param: param);
 
-                return new HttpResponseResult<AnsPat> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<AnsPat>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<AnsPat> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<AnsPat>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Sergery/GetFindOpRmNo/{upDeptCd}/{rosset}")]
-        public HttpResponseResult<OpRm> GetFindOpRmNo(string upDeptCd, string rosset)
+        public HttpResponseResult<IEnumerable<OpRm>> GetFindOpRmNo(string upDeptCd, string rosset)
         {
             try
             {
@@ -79,11 +79,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<OpRm> info = SqlHelper.GetList<OpRm>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_SelectOpRmNoByRosset", param: param);
 
-                return new HttpResponseResult<OpRm> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<OpRm>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<OpRm> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<OpRm>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

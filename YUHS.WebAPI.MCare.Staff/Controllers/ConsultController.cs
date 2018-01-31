@@ -5,7 +5,7 @@ using System.Data;
 using System.Web.Http;
 using YUHS.WebAPI.Common.DataAccess;
 using YUHS.WebAPI.Common.Security;
-using YUHS.WebAPI.MCare.Patient.Models.Common;
+using YUHS.WebAPI.MCare.Staff.Models.Common;
 using YUHS.WebAPI.MCare.Staff.Models.Consult;
 
 namespace YUHS.WebAPI.MCare.Staff.Controllers
@@ -14,7 +14,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
     public class ConsultController : ApiController
     {
         [Route("Consult/GetConsultReqListPerDoctor/{hosCd}/{sYmd}/{eYmd}/{deptCd}/{drId}/{statusCd}")]
-        public HttpResponseResult<ConsultReqList> GetConsultReqListPerDoctor(string hosCd, string sYmd, string eYmd, string deptCd, string drId, string statusCd)
+        public HttpResponseResult<IEnumerable<ConsultReqList>> GetConsultReqListPerDoctor(string hosCd, string sYmd, string eYmd, string deptCd, string drId, string statusCd)
         {
             try
             {
@@ -28,16 +28,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ConsultReqList> info = SqlHelper.GetList<ConsultReqList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getConsultReqListPerDoctor", param: param);
 
-                return new HttpResponseResult<ConsultReqList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ConsultReqList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Consult/GetConsultResListPerDoctor/{hosCd}/{sYmd}/{eYmd}/{drId}/{deptCd}/{viewTyp}/{treatTyp}/{statusTyp}")]
-        public HttpResponseResult<ConsultReqList> GetConsultResListPerDoctor(string hosCd, string sYmd, string eYmd, string drId, string deptCd, string viewTyp, string treatTyp, string statusTyp)
+        public HttpResponseResult<IEnumerable<ConsultReqList>> GetConsultResListPerDoctor(string hosCd, string sYmd, string eYmd, string drId, string deptCd, string viewTyp, string treatTyp, string statusTyp)
         {
             try
             {
@@ -53,16 +53,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ConsultReqList> info = SqlHelper.GetList<ConsultReqList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getConsultResListPerDoctor", param: param);
 
-                return new HttpResponseResult<ConsultReqList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ConsultReqList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Consult/GetConsultResListPerDept/{hosCd}/{sYmd}/{eYmd}/{deptCd}/{treatTyp}/{statusTyp}")]
-        public HttpResponseResult<ConsultReqList> GetConsultResListPerDept(string hosCd, string sYmd, string eYmd, string deptCd, string treatTyp, string statusTyp)
+        public HttpResponseResult<IEnumerable<ConsultReqList>> GetConsultResListPerDept(string hosCd, string sYmd, string eYmd, string deptCd, string treatTyp, string statusTyp)
         {
             try
             {
@@ -76,16 +76,16 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ConsultReqList> info = SqlHelper.GetList<ConsultReqList>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getConsultResListPerDept", param: param);
 
-                return new HttpResponseResult<ConsultReqList> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ConsultReqList> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ConsultReqList>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
 
         [Route("Consult/GetConsultInfo/{hosCd}/{unitNo}/{reqYmd}/{reqDeptCd}/{reqDrId}/{resDeptCd}/{resDrId}/{consultTyp}")]
-        public HttpResponseResult<ConsultInfo> GetConsultInfo(string hosCd, string unitNo, string reqYmd, string reqDeptCd, string reqDrId, string resDeptCd, string resDrId, string consultTyp)
+        public HttpResponseResult<IEnumerable<ConsultInfo>> GetConsultInfo(string hosCd, string unitNo, string reqYmd, string reqDeptCd, string reqDrId, string resDeptCd, string resDrId, string consultTyp)
         {
             try
             {
@@ -102,11 +102,11 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
 
                 IEnumerable<ConsultInfo> info = SqlHelper.GetList<ConsultInfo>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getConsultInfo", param: param);
 
-                return new HttpResponseResult<ConsultInfo> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<ConsultInfo>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<ConsultInfo> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<ConsultInfo>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }

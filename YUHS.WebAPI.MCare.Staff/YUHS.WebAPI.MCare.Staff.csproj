@@ -227,6 +227,8 @@
     <Compile Include="Models\Sergery\OpRm.cs" />
     <Compile Include="Models\TESExamRslt\AppYmdByEGFR.cs" />
     <Compile Include="Models\TESExamRslt\CurrClnInfo.cs" />
+    <Compile Include="Models\TESExamRslt\ExamForm.cs" />
+    <Compile Include="Models\TESExamRslt\ExamInfo.cs" />
     <Compile Include="Models\TESExamRslt\ExamListByEx.cs" />
     <Compile Include="Models\TESExamRslt\ExamListByFrmLab.cs" />
     <Compile Include="Models\TESExamRslt\ExamListByHC.cs" />
