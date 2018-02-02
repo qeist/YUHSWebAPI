@@ -135,8 +135,8 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
             }
         }
 
-        [Route("User/GetFindPatientId/{hospitalCd}/{patientNm}/{personalNo}")]
-        public HttpResponseResult<PatientId> GetFindPatientId(string hospitalCd, string patientNm, string personalNo)
+        [Route("User/GetFindPatientId/{hospitalCd}/{patientNm}/{personalNo}/{crtnGb?}")]
+        public HttpResponseResult<PatientId> GetFindPatientId(string hospitalCd, string patientNm, string personalNo, string crtnGb = "")
         {
             try
             {
@@ -144,6 +144,8 @@ namespace YUHS.WebAPI.MCare.Patient.Controllers
                 param.Add(name: "@HosCd", value: hospitalCd, dbType: DbType.StringFixedLength, size: 2);
                 param.Add(name: "@PatNm", value: patientNm, dbType: DbType.String, size: 100);
                 param.Add(name: "@IdNo", value: personalNo, dbType: DbType.String, size: 14);
+                param.Add(name: "@iCrtnGb", value: crtnGb, dbType: DbType.String, size: 1); // value : T or S or ""
+                
 
                 IEnumerable<PatientId> info = SqlHelper.GetList<PatientId>(targetDB: SqlHelper.GetConnectionString("HConnectionString"), storedProcedure: "USP_HP_EXT_IF_Mobile_SelectUnitNoByPatId", param: param);
 
