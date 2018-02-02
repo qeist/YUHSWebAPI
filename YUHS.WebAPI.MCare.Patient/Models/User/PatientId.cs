@@ -4,5 +4,6 @@
     {
         public string hospitalCd { get; set; }
         public string patientId { get; set; }
+        public string CrtnGb { get; set; }
     }
 }
