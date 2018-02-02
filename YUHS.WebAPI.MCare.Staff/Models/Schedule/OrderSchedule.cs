@@ -18,7 +18,8 @@
         public string FriPm { get; set; }
         public string SatAm { get; set; }
         public string SatPm { get; set; }
-        public string ClnMemo { get; set; }
+        public string doctorTel { get; set; }
+        public string doctorSpecialArea { get; set; }
         public string doctorId { get; set; }
         public string DisRnk { get; set; }
         public string SEQ { get; set; }
