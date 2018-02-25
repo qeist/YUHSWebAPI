@@ -874,7 +874,7 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             try
             {
                 var param = new DynamicParameters();
-                param.Add(name: "@AccNo", value: accNo, dbType: DbType.String, size: 10); //DbType.String, size: 10
+                param.Add(name: "@AccNo", value: accNo, dbType: DbType.String, size: 10);
 
                 IEnumerable<TrSchedule> info = SqlHelper.GetList<TrSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRsltByEx", param: param);
 
