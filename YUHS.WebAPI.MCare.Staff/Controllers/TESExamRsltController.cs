@@ -867,5 +867,23 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
                 return new HttpResponseResult<IEnumerable<ExamForm>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
+        
+        [Route("TESExamRslt/GetExamRsltByEx/{accNo}")]
+        public HttpResponseResult<IEnumerable<TrSchedule>> GetExamRsltByEx(string accNo)
+        {
+            try
+            {
+                var param = new DynamicParameters();
+                param.Add(name: "@AccNo", value: accNo, dbType: DbType.String, size: 10); //DbType.String, size: 10
+
+                IEnumerable<TrSchedule> info = SqlHelper.GetList<TrSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRsltByEx", param: param);
+
+                return new HttpResponseResult<IEnumerable<TrSchedule>> { result = info, error = new ErrorInfo { flag = false } };
+            }
+            catch (Exception ex)
+            {
+                return new HttpResponseResult<IEnumerable<TrSchedule>> { error = new ErrorInfo { flag = true, message = ex.Message } };
+            }
+        }
     }
 }
