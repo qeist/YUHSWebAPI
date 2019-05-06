@@ -868,21 +868,31 @@ namespace YUHS.WebAPI.MCare.Staff.Controllers
             }
         }
         
-        [Route("TESExamRslt/GetExamRsltByEx/{accNo}")]
-        public HttpResponseResult<IEnumerable<ExamRsltByEx>> GetExamRsltByEx(string accNo)
+
+        [Route("TESExamRslt/GetTrSchedule/{hospitalCd}/{viewFmDt}/{viewToDt}/{departmentCd}/{treatmentCntr}/{treatTyp}/{treatmentTyp1}/{treatmentTyp2}/{treatmentTyp3}")]
+        public HttpResponseResult<IEnumerable<TrSchedule>> GetTrSchedule(string hospitalCd, string viewFmDt, string viewToDt, string departmentCd, string treatmentCntr, string treatTyp, string treatmentTyp1, string treatmentTyp2, string treatmentTyp3)
         {
             try
             {
                 var param = new DynamicParameters();
-                param.Add(name: "@AccNo", value: accNo, dbType: DbType.String, size: 10);
+                param.Add(name: "@hospitalCd", value: hospitalCd, dbType: DbType.String, size: 2);
+                param.Add(name: "@viewFmDt", value: viewFmDt, dbType: DbType.String, size: 8);
+                param.Add(name: "@viewToDt", value: viewToDt, dbType: DbType.String, size: 8);
+                param.Add(name: "@departmentCd", value: departmentCd, dbType: DbType.String, size: 5);
+                param.Add(name: "@treatmentCntr", value: treatmentCntr, dbType: DbType.String, size: 5);
+                param.Add(name: "@treatTyp", value: treatTyp, dbType: DbType.String, size: 1);
+                param.Add(name: "@treatmentDrNm", value: "", dbType: DbType.String, size: 10);
+                param.Add(name: "@treatmentTyp1", value: treatmentTyp1, dbType: DbType.String, size: 1);
+                param.Add(name: "@treatmentTyp2", value: treatmentTyp2, dbType: DbType.String, size: 1);
+                param.Add(name: "@treatmentTyp3", value: treatmentTyp3, dbType: DbType.String, size: 1);
 
-                IEnumerable<ExamRsltByEx> info = SqlHelper.GetList<ExamRsltByEx>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_getExamRsltByEx", param: param);
+                IEnumerable<TrSchedule> info = SqlHelper.GetList<TrSchedule>(targetDB: SqlHelper.GetConnectionString("ZConnectionString"), storedProcedure: "USP_ZZ_EXT_IF_Mobile_TES_getTrSchedule", param: param);
 
-                return new HttpResponseResult<IEnumerable<ExamRsltByEx>> { result = info, error = new ErrorInfo { flag = false } };
+                return new HttpResponseResult<IEnumerable<TrSchedule>> { result = info, error = new ErrorInfo { flag = false } };
             }
             catch (Exception ex)
             {
-                return new HttpResponseResult<IEnumerable<ExamRsltByEx>> { error = new ErrorInfo { flag = true, message = ex.Message } };
+                return new HttpResponseResult<IEnumerable<TrSchedule>> { error = new ErrorInfo { flag = true, message = ex.Message } };
             }
         }
     }
